@@ -1,1 +1,5 @@
-print("hello world")
+import pygame
+
+def idle_animation(pokemon, frames):
+    pass
+
