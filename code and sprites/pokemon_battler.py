@@ -1,5 +1,5 @@
 import pygame
-from pygame_functions import *
+import pygame_functions
 
-screenSize(600,600) 
-setBackgroundColour('green')
+pygame_functions.screenSize(600,600) 
+pygame_functions.setBackgroundColour('green')
