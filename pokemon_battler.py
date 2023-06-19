@@ -5,7 +5,28 @@ screenSize(600,600)
 setBackgroundColour('dark green')
 blaziken_sprite = makeSprite("blaziken final full.png", 33)
 
-moveSprite(blaziken_sprite, 300, 300, True)
+moveSprite(blaziken_sprite, 150, 450, True)
 showSprite(blaziken_sprite)
+transformSprite(blaziken_sprite, 0, 2)
 
+next_frame = clock()
+frame = 0
+attacking = False
+
+while True:
+    if clock() > next_frame:
+        frame = (frame + 1)%16
+        next_frame += 40 
+
+    tick(120)
+    if keyPressed("right"):
+        attacking = True
+    else:
+        changeSpriteImage(blaziken_sprite,0 *16 + frame)
+        
+    if attacking == True:
+        for i in range(16):
+            changeSpriteImage(blaziken_sprite, 16 + i)
+            pause(20, True)
+            attacking = False
 endWait()
