@@ -3,11 +3,15 @@ from pygame_functions import *
 
 screenSize(600,600) 
 setBackgroundColour('dark green')
-blaziken_sprite = makeSprite("blaziken final full.png", 33)
+blaziken_sprite = makeSprite("sprites/blaziken final full.png", 33)
+eevee_sprite = makeSprite("sprites/eevee.png")
 
-moveSprite(blaziken_sprite, 150, 450, True)
+showSprite(eevee_sprite)
+moveSprite(eevee_sprite, 500, 150, True)
+transformSprite(eevee_sprite, 0, 0.4)
+moveSprite(blaziken_sprite, 150, 350, True)
 showSprite(blaziken_sprite)
-transformSprite(blaziken_sprite, 0, 2)
+transformSprite(blaziken_sprite, 0, 2.5)
 
 next_frame = clock()
 frame = 0
