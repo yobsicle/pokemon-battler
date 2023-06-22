@@ -6,6 +6,9 @@ setBackgroundColour('dark green')
 blaziken_sprite = makeSprite("sprites/blaziken final full.png", 33)
 eevee_sprite = makeSprite("sprites/eevee.png")
 
+earthquake = makeLabel("Earthquake", 32, 100, 100, "black", "Pokemon Fire Red")
+showLabel(earthquake)
+
 showSprite(eevee_sprite)
 moveSprite(eevee_sprite, 500, 150, True)
 transformSprite(eevee_sprite, 0, 0.4)
