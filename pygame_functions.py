@@ -180,7 +180,7 @@ class newTextBox(pygame.sprite.Sprite):
         self.image.fill((255, 255, 255))
         pygame.draw.rect(self.image, (0, 0, 0), [0, 0, width - 1, self.boxSize - 1], 2)
         self.rect = self.image.get_rect()
-        self.fontFace = pygame.font.match_font("Arial")
+        self.fontFace = pygame.font.match_font("Pokemon Fire Red")
         self.fontColour = pygame.Color("black")
         self.initialColour = (180, 180, 180)
         self.font = pygame.font.Font(self.fontFace, fontSize)
