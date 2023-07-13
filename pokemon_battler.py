@@ -1,9 +1,24 @@
 import pygame
 from pygame_functions import *
-setBackgroundImage("starters.jpg")
-starter_choice = input("""Choose your starter:
-1: Sceptile      2: Blaziken      3: Swampert""")
-screenSize(600,392) 
+screenSize(600,392)
+starter_background = makeSprite("sprites/starters.png")
+transformSprite(starter_background, 0, 0.5)
+moveSprite(starter_background, -20, -35)
+showSprite(starter_background)
+choosing_starter = True
+while choosing_starter is True:
+    try:
+        starter_choice = int(input("""Choose your starter:
+1: Sceptile      2: Blaziken      3: Swampert
+Enter choice here: """))
+        if starter_choice < 1:
+            print("That number is too low. Please enter a valid number from 1-3.")
+        elif starter_choice > 3:
+            print("That number is too high. Please enter a valid number from 1-3.")
+        else:
+            choosing_starter = False
+    except ValueError:
+        print("Please enter a valid number from 1-3")
 background_sprite = makeSprite('sprites/battle background.png')
 blaziken_sprite = makeSprite("sprites/blaziken final full.png", 33)
 eevee_sprite = makeSprite("sprites/eevee.png")
