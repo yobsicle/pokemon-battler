@@ -1,20 +1,35 @@
 import pygame
 from pygame_functions import *
-
-screenSize(600,600) 
-setBackgroundColour('dark green')
+setBackgroundImage("starters.jpg")
+starter_choice = input("""Choose your starter:
+1: Sceptile      2: Blaziken      3: Swampert""")
+screenSize(600,392) 
+background_sprite = makeSprite('sprites/battle background.png')
 blaziken_sprite = makeSprite("sprites/blaziken final full.png", 33)
 eevee_sprite = makeSprite("sprites/eevee.png")
-
-earthquake = makeLabel("Earthquake", 32, 100, 100, "green", 'Pokemon')
+battle_menu = makeSprite("sprites/battle menu.png", 4)
+earthquake = makeLabel("EARTHQUAKE", 30, 40, 290, "black", 'Agency FB')
+blaze_kick = makeLabel("BLAZE KICK", 30, 230, 290, "black", "Agency FB")
+flamethrower = makeLabel("FLAMETHROWER", 30, 40, 343, "black", "Agency FB")
+fire_blast = makeLabel("FIRE BLAST", 30, 230, 343, "black", "Agency FB")
+showLabel(blaze_kick)
 showLabel(earthquake)
+showLabel(flamethrower)
+showLabel(fire_blast)
+current_selection = 0
 
+transformSprite(background_sprite, 0, 2.5)
+moveSprite(background_sprite, 0, 0)
+showSprite(background_sprite)
 showSprite(eevee_sprite)
-moveSprite(eevee_sprite, 500, 150, True)
-transformSprite(eevee_sprite, 0, 0.4)
-moveSprite(blaziken_sprite, 150, 350, True)
+moveSprite(eevee_sprite, 450, 100, True)
+transformSprite(eevee_sprite, 0, 0.35)
+moveSprite(blaziken_sprite, 150, 250, True)
 showSprite(blaziken_sprite)
-transformSprite(blaziken_sprite, 0, 2.5)
+transformSprite(blaziken_sprite, 0, 2.6)
+showSprite(battle_menu)
+transformSprite(battle_menu, 0, 2.55)
+moveSprite(battle_menu, 0, 280)
 
 next_frame = clock()
 frame = 0
@@ -25,12 +40,25 @@ while True:
         frame = (frame + 1)%16
         next_frame += 40 
 
-    tick(120)
-    if keyPressed("right"):
+    tick(12)
+    if keyPressed("y"):
         attacking = True
     else:
         changeSpriteImage(blaziken_sprite,0 *16 + frame)
-        
+
+    if keyPressed("right"):
+        current_selection = (current_selection + 1)%4
+        changeSpriteImage(battle_menu, current_selection)
+    elif keyPressed("down"):
+        current_selection = (current_selection + 1)%4
+        changeSpriteImage(battle_menu, current_selection)
+    elif keyPressed("up"):
+        current_selection = (current_selection - 1)%4
+        changeSpriteImage(battle_menu, current_selection)
+    elif keyPressed("left"):
+        current_selection = (current_selection - 1)%4
+        changeSpriteImage(battle_menu, current_selection)
+
     if attacking == True:
         for i in range(16):
             changeSpriteImage(blaziken_sprite, 16 + i)
