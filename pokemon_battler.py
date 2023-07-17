@@ -1,3 +1,4 @@
+# base level calibration stuff for pygame.
 import pygame
 from pygame_functions import *
 screenSize(600,392)
@@ -5,6 +6,8 @@ starter_background = makeSprite("sprites/starters.png")
 transformSprite(starter_background, 0, 0.5)
 moveSprite(starter_background, -20, -35)
 showSprite(starter_background)
+
+# run a loop that lets the user choose a starter.
 choosing_starter = True
 while choosing_starter is True:
     try:
@@ -20,7 +23,53 @@ Enter choice here: """))
     except ValueError:
         print("Please enter a valid number from 1-3")
 
-moves = ()
+
+# functions that hide/show certain things.
+def hide_show_moves(hide_or_show):
+    if hide_or_show == "show":
+        showLabel(moves[0][0])
+        showLabel(moves[1][0])
+        showLabel(moves[2][0])
+        showLabel(moves[3][0])
+    elif hide_or_show == "hide":
+        hideLabel(moves[0][0])
+        hideLabel(moves[1][0])
+        hideLabel(moves[2][0])
+        hideLabel(moves[3][0])
+
+
+
+def hide_show_damage_acc(hide_or_show):
+    if hide_or_show == "show":
+        showLabel(damage_acc_1)
+        showLabel(damage_acc_2)
+        showLabel(damage_acc_3)
+        showLabel(damage_acc_4)
+    elif hide_or_show == "hide":
+        hideLabel(damage_acc_1)
+        hideLabel(damage_acc_2)
+        hideLabel(damage_acc_3)
+        hideLabel(damage_acc_4)
+
+
+def hide_show_starter(hide_or_show):
+    if hide_or_show == "show":
+        if starter_choice == 1:
+            showSprite(sceptile_sprite)
+        elif starter_choice == 2:
+            showSprite(blaziken_sprite)
+        elif starter_choice == 3:
+            showSprite(swampert_sprite)
+    elif hide_or_show == "hide":
+        if starter_choice == 1:
+            hideSprite(sceptile_sprite)
+        elif starter_choice == 2:
+            hideSprite(blaziken_sprite)
+        elif starter_choice == 3:
+            hideSprite(swampert_sprite)
+
+
+# create all of the sprites and labels for the game.
 background_sprite = makeSprite('sprites/battle background.png')
 blaziken_sprite = makeSprite("sprites/blaziken final full.png", 33)
 sceptile_sprite = makeSprite('sprites/sceptile final.png', 27)
@@ -40,6 +89,8 @@ hammer_arm = makeLabel("HAMMER ARM", 30, 40, 343, "black", "Agency FB")
 water_pulse = makeLabel("WATER PULSE", 30, 230, 343, "black", "Agency FB")
 current_selection = 0
 
+# move, show, transform all the sprites and labels so they look right
+# and appear in the correct position.
 transformSprite(background_sprite, 0, 2.5)
 moveSprite(background_sprite, 0, 0)
 showSprite(background_sprite)
@@ -49,12 +100,7 @@ transformSprite(eevee_sprite, 0, 0.35)
 moveSprite(blaziken_sprite, 150, 250, True)
 moveSprite(sceptile_sprite, 150, 250, True)
 moveSprite(swampert_sprite, 150, 250, True)
-if starter_choice == 1:
-    showSprite(sceptile_sprite)
-elif starter_choice == 2:
-    showSprite(blaziken_sprite)
-elif starter_choice == 3:
-    showSprite(swampert_sprite)
+hide_show_starter("show")
 transformSprite(blaziken_sprite, 0, 2.6)
 transformSprite(sceptile_sprite, 0, 2.6)
 transformSprite(swampert_sprite, 0, 2.6)
@@ -63,21 +109,24 @@ transformSprite(battle_menu, 0, 2.55)
 moveSprite(battle_menu, 0, 280)
 
 if starter_choice == 1:
-    moves = (energy_ball, x_scissor, iron_tail, brick_break)
+    moves = ((energy_ball, 90, 100, "grass"),(x_scissor, 80, 100, "bug"), (iron_tail, 100, 80, "steel"), (brick_break, 75, 100, "fighting"))
 elif starter_choice == 2:
-    moves = (earthquake, blaze_kick, flamethrower, fire_blast)
+    moves = ((earthquake, 100, 100, "ground"), (blaze_kick, 85, 90, "fire"), (flamethrower, 90, 100, "fire"), (fire_blast, 110, 85, "fire"))
 elif starter_choice == 3:
-    moves = (earthquake, hydro_pump, hammer_arm, water_pulse)
+    moves = ((earthquake, 100, 100, "ground"), (hydro_pump, 110, 85, "water"), (hammer_arm, 100, 90, "fighting"), (water_pulse, 60, 100, "water"))
 
-showLabel(moves[0])
-showLabel(moves[1])
-showLabel(moves[2])
-showLabel(moves[3])
+hide_show_moves("show")
+damage_acc_1 = makeLabel(f"{moves[0][1]}/{moves[0][2]}", 30, 0, 0, "black", "Agency FB")
+damage_acc_2 = makeLabel(f"{moves[0][1]}/{moves[0][2]}", 30, 0, 0, "black", "Agency FB")
+damage_acc_3 = makeLabel(f"{moves[0][1]}/{moves[0][2]}", 30, 0, 0, "black", "Agency FB")
+damage_acc_4 = makeLabel(f"{moves[0][1]}/{moves[0][2]}", 30, 0, 0, "black", "Agency FB")
+hide_show_damage_acc("show")
 
 next_frame = clock()
 frame = 0
 attacking = False
 
+# the actual running game
 while True:
     if clock() > next_frame:
         if starter_choice == 1:
