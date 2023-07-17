@@ -19,6 +19,8 @@ Enter choice here: """))
             choosing_starter = False
     except ValueError:
         print("Please enter a valid number from 1-3")
+
+moves = ()
 background_sprite = makeSprite('sprites/battle background.png')
 blaziken_sprite = makeSprite("sprites/blaziken final full.png", 33)
 sceptile_sprite = makeSprite('sprites/sceptile final.png', 27)
@@ -29,10 +31,13 @@ earthquake = makeLabel("EARTHQUAKE", 30, 40, 290, "black", 'Agency FB')
 blaze_kick = makeLabel("BLAZE KICK", 30, 230, 290, "black", "Agency FB")
 flamethrower = makeLabel("FLAMETHROWER", 30, 40, 343, "black", "Agency FB")
 fire_blast = makeLabel("FIRE BLAST", 30, 230, 343, "black", "Agency FB")
-showLabel(blaze_kick)
-showLabel(earthquake)
-showLabel(flamethrower)
-showLabel(fire_blast)
+energy_ball = makeLabel("ENERGY BALL", 30, 40, 290, "black", 'Agency FB')
+x_scissor = makeLabel("X-SCISSOR", 30, 230, 290, "black", "Agency FB")
+iron_tail = makeLabel("IRON TAIL", 30, 40, 343, "black", "Agency FB")
+brick_break = makeLabel("BRICK BREAK", 30, 230, 343, "black", "Agency FB")
+hydro_pump = makeLabel("HYDRO PUMP", 30, 230, 290, "black", "Agency FB")
+hammer_arm = makeLabel("HAMMER ARM", 30, 40, 343, "black", "Agency FB")
+water_pulse = makeLabel("WATER PULSE", 30, 230, 343, "black", "Agency FB")
 current_selection = 0
 
 transformSprite(background_sprite, 0, 2.5)
@@ -56,6 +61,18 @@ transformSprite(swampert_sprite, 0, 2.6)
 showSprite(battle_menu)
 transformSprite(battle_menu, 0, 2.55)
 moveSprite(battle_menu, 0, 280)
+
+if starter_choice == 1:
+    moves = (energy_ball, x_scissor, iron_tail, brick_break)
+elif starter_choice == 2:
+    moves = (earthquake, blaze_kick, flamethrower, fire_blast)
+elif starter_choice == 3:
+    moves = (earthquake, hydro_pump, hammer_arm, water_pulse)
+
+showLabel(moves[0])
+showLabel(moves[1])
+showLabel(moves[2])
+showLabel(moves[3])
 
 next_frame = clock()
 frame = 0
