@@ -38,20 +38,6 @@ def hide_show_moves(hide_or_show):
         hideLabel(moves[3][0])
 
 
-
-def hide_show_damage_acc(hide_or_show):
-    if hide_or_show == "show":
-        showLabel(damage_acc_1)
-        showLabel(damage_acc_2)
-        showLabel(damage_acc_3)
-        showLabel(damage_acc_4)
-    elif hide_or_show == "hide":
-        hideLabel(damage_acc_1)
-        hideLabel(damage_acc_2)
-        hideLabel(damage_acc_3)
-        hideLabel(damage_acc_4)
-
-
 def hide_show_starter(hide_or_show):
     if hide_or_show == "show":
         if starter_choice == 1:
@@ -109,23 +95,22 @@ transformSprite(battle_menu, 0, 2.55)
 moveSprite(battle_menu, 0, 280)
 
 if starter_choice == 1:
-    moves = ((energy_ball, 90, 100, "grass"),(x_scissor, 80, 100, "bug"), (iron_tail, 100, 80, "steel"), (brick_break, 75, 100, "fighting"))
+    moves = ((energy_ball, 90, 100, "GRASS"),(x_scissor, 80, 100, "BUG"), (iron_tail, 100, 80, "STEEL"), (brick_break, 75, 100, "FIGHTING"))
 elif starter_choice == 2:
-    moves = ((earthquake, 100, 100, "ground"), (blaze_kick, 85, 90, "fire"), (flamethrower, 90, 100, "fire"), (fire_blast, 110, 85, "fire"))
+    moves = ((earthquake, 100, 100, "GROUND"), (blaze_kick, 85, 90, "FIRE"), (flamethrower, 90, 100, "FIRE"), (fire_blast, 110, 85, "FIRE"))
 elif starter_choice == 3:
-    moves = ((earthquake, 100, 100, "ground"), (hydro_pump, 110, 85, "water"), (hammer_arm, 100, 90, "fighting"), (water_pulse, 60, 100, "water"))
+    moves = ((earthquake, 100, 100, "GROUND"), (hydro_pump, 110, 85, "WATER"), (hammer_arm, 100, 90, "FIGHTING"), (water_pulse, 60, 100, "WATER"))
 
 hide_show_moves("show")
-damage_acc_1 = makeLabel(f"{moves[0][1]}/{moves[0][2]}", 30, 0, 0, "black", "Agency FB")
-damage_acc_2 = makeLabel(f"{moves[0][1]}/{moves[0][2]}", 30, 0, 0, "black", "Agency FB")
-damage_acc_3 = makeLabel(f"{moves[0][1]}/{moves[0][2]}", 30, 0, 0, "black", "Agency FB")
-damage_acc_4 = makeLabel(f"{moves[0][1]}/{moves[0][2]}", 30, 0, 0, "black", "Agency FB")
-hide_show_damage_acc("show")
+current_move = 0
 
+# setup for the clock function
 next_frame = clock()
 frame = 0
 attacking = False
 
+damage_acc = makeLabel("", 0, 0, 0)
+move_type = makeLabel("", 0, 0, 0)
 # the actual running game
 while True:
     if clock() > next_frame:
@@ -140,6 +125,16 @@ while True:
             next_frame += 40 
 
     tick(12)
+    # make the damage/acc label
+    hideLabel(damage_acc)
+    damage_acc = makeLabel(f"{moves[current_move][1]}/{moves[current_move][2]}", 26, 526, 302, "black", "Agency FB")
+    showLabel(damage_acc)
+
+    # make the move type label
+    hideLabel(move_type)
+    move_type = makeLabel(f"{moves[current_move][3]}", 28, 485, 344, "black", "Agency FB")
+    showLabel(move_type)
+
     if keyPressed("y"):
         attacking = True
     elif starter_choice == 1:
@@ -152,15 +147,19 @@ while True:
     if keyPressed("right"):
         current_selection = (current_selection + 1)%4
         changeSpriteImage(battle_menu, current_selection)
+        current_move = (current_move + 1)%4
     elif keyPressed("down"):
         current_selection = (current_selection + 1)%4
         changeSpriteImage(battle_menu, current_selection)
+        current_move = (current_move + 1)%4
     elif keyPressed("up"):
         current_selection = (current_selection - 1)%4
         changeSpriteImage(battle_menu, current_selection)
+        current_move = (current_move - 1)%4
     elif keyPressed("left"):
         current_selection = (current_selection - 1)%4
         changeSpriteImage(battle_menu, current_selection)
+        current_move = (current_move - 1)%4
 
     if attacking == True:
         if starter_choice == 1:
