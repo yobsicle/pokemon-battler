@@ -1,6 +1,7 @@
 # base level calibration stuff for pygame.
 import pygame
 from pygame_functions import *
+import random
 screenSize(600,392)
 starter_background = makeSprite("sprites/starters.png")
 transformSprite(starter_background, 0, 0.5)
@@ -27,15 +28,15 @@ Enter choice here: """))
 # functions that hide/show certain things.
 def hide_show_moves(hide_or_show):
     if hide_or_show == "show":
-        showLabel(moves[0][0])
-        showLabel(moves[1][0])
-        showLabel(moves[2][0])
-        showLabel(moves[3][0])
+        showLabel(moves[0]["name"])
+        showLabel(moves[1]["name"])
+        showLabel(moves[2]["name"])
+        showLabel(moves[3]["name"])
     elif hide_or_show == "hide":
-        hideLabel(moves[0][0])
-        hideLabel(moves[1][0])
-        hideLabel(moves[2][0])
-        hideLabel(moves[3][0])
+        hideLabel(moves[0]["name"])
+        hideLabel(moves[1]["name"])
+        hideLabel(moves[2]["name"])
+        hideLabel(moves[3]["name"])
 
 
 def hide_show_starter(hide_or_show):
@@ -55,9 +56,18 @@ def hide_show_starter(hide_or_show):
             hideSprite(swampert_sprite)
 
 
-def calc_damage(target, move):
-    type_multiplier = type_effectiveness[move[3]][target["type"]] * type_effectiveness[move[3]][target["type 2"]]
-    
+def calc_damage(target_stats, move):
+    type_multiplier = type_effectiveness[move["type"]][target_stats["type"]] * type_effectiveness[move["type"]][target_stats["type 2"]]
+    if move["stab"] is True:
+        stab_multi = 1.5
+    else:
+        stab_multi = 1
+    if random.randint(0,100) <= move["accuracy"]:
+        pass
+    else:
+        damage = 0
+    # return damage
+    print(type_multiplier)
 
 # create all of the sprites and labels for the game.
 background_sprite = makeSprite('sprites/battle background.png')
@@ -107,6 +117,7 @@ type_effectiveness = {"FIRE": {"FIRE": 0.5, "WATER": 0.5, "GRASS": 2, "NORMAL": 
 # stats for all pokemon
 eevee_stats = {"type": "NORMAL", "health": 100, "defense": 100}
 blaziken_stats = {"type": "FIRE", "type 2": "FIGHTING", "health": 100, "defense": 100}
+swampert_stats = {"type": "WATER", "type 2": "GROUND", "health": 100, "defense": 100}
 current_selection = 0
 
 # move, show, transform all the sprites and labels so they look right
@@ -130,16 +141,22 @@ moveSprite(battle_menu, 0, 280)
 
 if starter_choice == 1:
     # format: move name, damage, accuracy, type, has stab
-    moves = ((energy_ball, 90, 100, "GRASS", True),(x_scissor, 80, 100, "BUG", False), (iron_tail, 100, 80, "STEEL", False),
-            (brick_break, 75, 100, "FIGHTING", False))
+    moves = ({"name": energy_ball, "damage": 90, "accuracy": 100, "type": "GRASS", "stab": True},
+             {"name": x_scissor, "damage": 80, "accuracy": 100, "type": "BUG", "stab": False},
+             {"name": iron_tail, "damage": 100, "accuracy": 80, "type": "STEEL", "stab": False},
+             {"name": brick_break, "damage": 75, "accuracy": 100, "type": "FIGHTING", "stab": False})
 elif starter_choice == 2:
-    moves = ((earthquake, 100, 100, "GROUND", False), (blaze_kick, 85, 90, "FIRE", True), (flamethrower, 90, 100, "FIRE", True),
-             (fire_blast, 110, 85, "FIRE", True))
+    moves = ({"name": earthquake, "damage": 100, "accuracy": 100, "type": "GROUND", "stab": False},
+             {"name": blaze_kick, "damage": 85, "accuracy": 90, "type": "FIRE", "stab": True},
+             {"name": flamethrower, "damage": 90, "accuracy": 100, "type": "FIRE", "stab": True},
+             {"name": fire_blast, "damage": 110, "accuracy": 85, "type": "FIRE", "stab": True})
 elif starter_choice == 3:
-    moves = ((earthquake, 100, 100, "GROUND", True), (hydro_pump, 110, 85, "WATER", True), (hammer_arm, 100, 90, "FIGHTING", False),
-             (water_pulse, 60, 100, "WATER", True))
-
-calc_damage(blaziken_stats, moves[1])
+    moves = ({"name": earthquake, "damage": 100, "accuracy": 100, "type": "GROUND", "stab": True},
+             {"name": hydro_pump, "damage": 110, "accuracy": 85, "type": "WATER", "stab": True},
+             {"name": hammer_arm, "damage": 100, "accuracy": 90, "type": "FIGHTING", "stab": False},
+             {"name": water_pulse, "damage": 60, "accuracy": 100, "type": "WATER", "stab": True})
+eevee_moves = ({})
+calc_damage(swampert_stats, moves[0])
 
 hide_show_moves("show")
 current_move = 0
@@ -167,12 +184,12 @@ while True:
     tick(12)
     # make the damage/acc label
     hideLabel(damage_acc)
-    damage_acc = makeLabel(f"{moves[current_move][1]}/{moves[current_move][2]}", 26, 526, 302, "black", "Agency FB")
+    damage_acc = makeLabel(f"{moves[current_move]['damage']}/{moves[current_move]['accuracy']}", 26, 526, 302, "black", "Agency FB")
     showLabel(damage_acc)
 
     # make the move type label
     hideLabel(move_type)
-    move_type = makeLabel(f"{moves[current_move][3]}", 28, 485, 344, "black", "Agency FB")
+    move_type = makeLabel(f"{moves[current_move]['type']}", 28, 485, 344, "black", "Agency FB")
     showLabel(move_type)
 
     if keyPressed("y"):
