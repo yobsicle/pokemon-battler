@@ -55,6 +55,10 @@ def hide_show_starter(hide_or_show):
             hideSprite(swampert_sprite)
 
 
+def calc_damage(target, move):
+    type_multiplier = type_effectiveness[move[3]][target["type"]] * type_effectiveness[move[3]][target["type 2"]]
+    
+
 # create all of the sprites and labels for the game.
 background_sprite = makeSprite('sprites/battle background.png')
 blaziken_sprite = makeSprite("sprites/blaziken final full.png", 33)
@@ -73,6 +77,36 @@ brick_break = makeLabel("BRICK BREAK", 30, 230, 343, "black", "Agency FB")
 hydro_pump = makeLabel("HYDRO PUMP", 30, 230, 290, "black", "Agency FB")
 hammer_arm = makeLabel("HAMMER ARM", 30, 40, 343, "black", "Agency FB")
 water_pulse = makeLabel("WATER PULSE", 30, 230, 343, "black", "Agency FB")
+# type effectiveness chart
+type_effectiveness = {"FIRE": {"FIRE": 0.5, "WATER": 0.5, "GRASS": 2, "NORMAL": 1, "FIGHTING": 1, "GROUND": 1, "DRAGON": 0.5,
+                               "STEEL": 2, "DARK": 1, "FLYING": 1, "PSYCHIC": 1, "BUG": 2, "NONE": 1}, 
+                      "NORMAL": {"FIRE": 1, "WATER": 1, "GRASS": 1, "NORMAL": 1, "FIGHTING": 1, "GROUND": 1, "DRAGON": 1,
+                                 "STEEL": 0.5, "DARK": 1, "FLYING": 1, "PSYCHIC": 1, "BUG": 1, "NONE": 1}, 
+                      "WATER": {"FIRE": 2, "WATER": 1, "GRASS": 0.5, "NORMAL": 1, "FIGHTING": 1, "GROUND": 2, "DRAGON": 0.5,
+                                "STEEL": 1, "DARK": 1, "FLYING": 1, "PSYCHIC": 1, "BUG": 1, "NONE": 1},
+                      "GRASS": {"FIRE": 0.5, "WATER": 2, "GRASS": 0.5, "NORMAL": 1, "FIGHTING": 1, "GROUND": 2, "DRAGON": 0.5,
+                                "STEEL": 0.5, "DARK": 1, "FLYING": 0.5, "PSYCHIC": 1, "BUG": 0.5, "NONE": 1},
+                      "FIGHTING": {"FIRE": 1, "WATER": 1, "GRASS": 1, "NORMAL": 2, "FIGHTING": 1, "GROUND": 1, "DRAGON": 1,
+                                   "STEEL": 2, "DARK": 2, "FLYING": 0.5, "PSYCHIC": 0.5, "BUG": 0.5, "NONE": 1},
+                      "GROUND": {"FIRE": 2, "WATER": 1, "GRASS": 0.5, "NORMAL": 1, "FIGHTING": 1, "GROUND": 1, "DRAGON": 1,
+                                 "STEEL": 2, "DARK": 1, "FLYING": 0, "PSYCHIC": 1, "BUG": 0.5, "NONE": 1},
+                      "DRAGON": {"FIRE": 1, "WATER": 1, "GRASS": 1, "NORMAL": 1, "FIGHTING": 1, "GROUND": 1, "DRAGON": 2,
+                                 "STEEL": 0.5, "DARK": 1, "FLYING": 1, "PSYCHIC": 1, "BUG": 1, "NONE": 1},
+                      "STEEL": {"FIRE": 0.5, "WATER": 0.5, "GRASS": 1, "NORMAL": 1, "FIGHTING": 1, "GROUND": 1, "DRAGON": 1,
+                                "STEEL": 0.5, "DARK": 1, "FLYING": 1, "PSYCHIC": 1, "BUG": 1, "NONE": 1},
+                      "DARK": {"FIRE": 1, "WATER": 1, "GRASS": 1, "NORMAL": 1, "FIGHTING": 0.5, "GROUND": 1, "DRAGON": 1,
+                               "STEEL": 1, "DARK": 0.5, "FLYING": 1, "PSYCHIC": 2, "BUG": 1, "NONE": 1},
+                      "FLYING": {"FIRE": 1, "WATER": 1, "GRASS": 2, "NORMAL": 1, "FIGHTING": 2, "GROUND": 1, "DRAGON": 1,
+                                  "STEEL": 0.5, "DARK": 1, "FLYING": 1, "PSYCHIC": 1, "BUG": 2, "NONE": 1},
+                      "PSYCHIC": {"FIRE": 1, "WATER": 1, "GRASS": 1, "NORMAL": 1, "FIGHTING": 2, "GROUND": 1, "DRAGON": 1,
+                                  "STEEL": 0.5, "DARK": 0, "FLYING": 1, "PSYCHIC": 0.5, "BUG": 1, "NONE": 1},
+                      "BUG": {"FIRE": 0.5, "WATER": 1, "GRASS": 2, "NORMAL": 1, "FIGHTING": 0.5, "GROUND": 1, "DRAGON": 1,
+                                  "STEEL": 0.5, "DARK": 2, "FLYING": 0.5, "PSYCHIC": 2, "BUG": 1, "NONE": 1},
+                      "NONE": {"FIRE": 1, "WATER": 1, "GRASS": 1, "NORMAL": 1, "FIGHTING": 1, "GROUND": 1, "DRAGON": 1,
+                                  "STEEL": 1, "DARK": 1, "FLYING": 1, "PSYCHIC": 1, "BUG": 1, "NONE": 1}}
+# stats for all pokemon
+eevee_stats = {"type": "NORMAL", "health": 100, "defense": 100}
+blaziken_stats = {"type": "FIRE", "type 2": "FIGHTING", "health": 100, "defense": 100}
 current_selection = 0
 
 # move, show, transform all the sprites and labels so they look right
@@ -95,11 +129,17 @@ transformSprite(battle_menu, 0, 2.55)
 moveSprite(battle_menu, 0, 280)
 
 if starter_choice == 1:
-    moves = ((energy_ball, 90, 100, "GRASS"),(x_scissor, 80, 100, "BUG"), (iron_tail, 100, 80, "STEEL"), (brick_break, 75, 100, "FIGHTING"))
+    # format: move name, damage, accuracy, type, has stab
+    moves = ((energy_ball, 90, 100, "GRASS", True),(x_scissor, 80, 100, "BUG", False), (iron_tail, 100, 80, "STEEL", False),
+            (brick_break, 75, 100, "FIGHTING", False))
 elif starter_choice == 2:
-    moves = ((earthquake, 100, 100, "GROUND"), (blaze_kick, 85, 90, "FIRE"), (flamethrower, 90, 100, "FIRE"), (fire_blast, 110, 85, "FIRE"))
+    moves = ((earthquake, 100, 100, "GROUND", False), (blaze_kick, 85, 90, "FIRE", True), (flamethrower, 90, 100, "FIRE", True),
+             (fire_blast, 110, 85, "FIRE", True))
 elif starter_choice == 3:
-    moves = ((earthquake, 100, 100, "GROUND"), (hydro_pump, 110, 85, "WATER"), (hammer_arm, 100, 90, "FIGHTING"), (water_pulse, 60, 100, "WATER"))
+    moves = ((earthquake, 100, 100, "GROUND", True), (hydro_pump, 110, 85, "WATER", True), (hammer_arm, 100, 90, "FIGHTING", False),
+             (water_pulse, 60, 100, "WATER", True))
+
+calc_damage(blaziken_stats, moves[1])
 
 hide_show_moves("show")
 current_move = 0
