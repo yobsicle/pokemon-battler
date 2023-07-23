@@ -23,36 +23,42 @@ Enter choice here: """))
             choosing_starter = False
     except ValueError:
         print("Please enter a valid number from 1-3")
+    if starter_choice == 1:
+        starter_choice = "SCEPTILE"
+    elif starter_choice == 2:
+        starter_choice = "BLAZIKEN"
+    elif starter_choice == 3:
+        starter_choice = "SWAMPERT"
 
 
 # functions that hide/show certain things.
 def hide_show_moves(hide_or_show):
     if hide_or_show == "show":
-        showLabel(moves[0]["name"])
-        showLabel(moves[1]["name"])
-        showLabel(moves[2]["name"])
-        showLabel(moves[3]["name"])
+        showLabel(moves[0]["label"])
+        showLabel(moves[1]["label"])
+        showLabel(moves[2]["label"])
+        showLabel(moves[3]["label"])
     elif hide_or_show == "hide":
-        hideLabel(moves[0]["name"])
-        hideLabel(moves[1]["name"])
-        hideLabel(moves[2]["name"])
-        hideLabel(moves[3]["name"])
+        hideLabel(moves[0]["label"])
+        hideLabel(moves[1]["label"])
+        hideLabel(moves[2]["label"])
+        hideLabel(moves[3]["label"])
 
 
 def hide_show_starter(hide_or_show):
     if hide_or_show == "show":
-        if starter_choice == 1:
+        if starter_choice == "SCEPTILE":
             showSprite(sceptile_sprite)
-        elif starter_choice == 2:
+        elif starter_choice == "BLAZIKEN":
             showSprite(blaziken_sprite)
-        elif starter_choice == 3:
+        elif starter_choice == "SWAMPERT":
             showSprite(swampert_sprite)
     elif hide_or_show == "hide":
-        if starter_choice == 1:
+        if starter_choice == "SCEPTILE":
             hideSprite(sceptile_sprite)
-        elif starter_choice == 2:
+        elif starter_choice == "BLAZIKEN":
             hideSprite(blaziken_sprite)
-        elif starter_choice == 3:
+        elif starter_choice == "SWAMPERT":
             hideSprite(swampert_sprite)
 
 
@@ -63,11 +69,19 @@ def calc_damage(target_stats, move):
     else:
         stab_multi = 1
     if random.randint(0,100) <= move["accuracy"]:
-        pass
+        damage = 0
     else:
         damage = 0
-    # return damage
-    print(type_multiplier)
+    if type_multiplier >= 2:
+        effectiveness = "super"
+        punctuation = "!"
+    elif type_multiplier <= 0.5:
+        effectiveness = "not very"
+        punctuation = "..."
+    else:
+        effectiveness = ""
+        punctuation = ""
+    return damage, effectiveness, punctuation
 
 # create all of the sprites and labels for the game.
 background_sprite = makeSprite('sprites/battle background.png')
@@ -76,11 +90,12 @@ sceptile_sprite = makeSprite('sprites/sceptile final.png', 27)
 swampert_sprite = makeSprite('sprites/swampert final.png', 34)
 eevee_sprite = makeSprite("sprites/eevee.png")
 battle_menu = makeSprite("sprites/battle menu.png", 4)
-earthquake = makeLabel("EARTHQUAKE", 30, 40, 290, "black", 'Agency FB')
+text_display = makeSprite("sprites/text display.png")
+earthquake = makeLabel("EARTHQUAKE", 30, 40, 290, "black", "Agency FB")
 blaze_kick = makeLabel("BLAZE KICK", 30, 230, 290, "black", "Agency FB")
 flamethrower = makeLabel("FLAMETHROWER", 30, 40, 343, "black", "Agency FB")
 fire_blast = makeLabel("FIRE BLAST", 30, 230, 343, "black", "Agency FB")
-energy_ball = makeLabel("ENERGY BALL", 30, 40, 290, "black", 'Agency FB')
+energy_ball = makeLabel("ENERGY BALL", 30, 40, 290, "black", "Agency FB")
 x_scissor = makeLabel("X-SCISSOR", 30, 230, 290, "black", "Agency FB")
 iron_tail = makeLabel("IRON TAIL", 30, 40, 343, "black", "Agency FB")
 brick_break = makeLabel("BRICK BREAK", 30, 230, 343, "black", "Agency FB")
@@ -135,32 +150,58 @@ hide_show_starter("show")
 transformSprite(blaziken_sprite, 0, 2.6)
 transformSprite(sceptile_sprite, 0, 2.6)
 transformSprite(swampert_sprite, 0, 2.6)
-showSprite(battle_menu)
 transformSprite(battle_menu, 0, 2.55)
 moveSprite(battle_menu, 0, 280)
+transformSprite(text_display, 0, 2.55)
+moveSprite(text_display, 0, 280)
+# showSprite(battle_menu)
+showSprite(text_display)
 
-if starter_choice == 1:
+if starter_choice == "SCEPTILE":
     # format: move name, damage, accuracy, type, has stab
-    moves = ({"name": energy_ball, "damage": 90, "accuracy": 100, "type": "GRASS", "stab": True},
-             {"name": x_scissor, "damage": 80, "accuracy": 100, "type": "BUG", "stab": False},
-             {"name": iron_tail, "damage": 100, "accuracy": 80, "type": "STEEL", "stab": False},
-             {"name": brick_break, "damage": 75, "accuracy": 100, "type": "FIGHTING", "stab": False})
-elif starter_choice == 2:
-    moves = ({"name": earthquake, "damage": 100, "accuracy": 100, "type": "GROUND", "stab": False},
-             {"name": blaze_kick, "damage": 85, "accuracy": 90, "type": "FIRE", "stab": True},
-             {"name": flamethrower, "damage": 90, "accuracy": 100, "type": "FIRE", "stab": True},
-             {"name": fire_blast, "damage": 110, "accuracy": 85, "type": "FIRE", "stab": True})
-elif starter_choice == 3:
-    moves = ({"name": earthquake, "damage": 100, "accuracy": 100, "type": "GROUND", "stab": True},
-             {"name": hydro_pump, "damage": 110, "accuracy": 85, "type": "WATER", "stab": True},
-             {"name": hammer_arm, "damage": 100, "accuracy": 90, "type": "FIGHTING", "stab": False},
-             {"name": water_pulse, "damage": 60, "accuracy": 100, "type": "WATER", "stab": True})
-eevee_moves = ({})
-calc_damage(swampert_stats, moves[0])
+    moves = ({"name": "ENERGY BALL", "label": energy_ball, "damage": 90, "accuracy": 100, "type": "GRASS", "stab": True},
+             {"name": "X SCISSOR", "label": x_scissor, "damage": 80, "accuracy": 100, "type": "BUG", "stab": False},
+             {"name": "IRON TAIL", "label": iron_tail, "damage": 100, "accuracy": 80, "type": "STEEL", "stab": False},
+             {"name": "BRICK BREAK", "label": brick_break, "damage": 75, "accuracy": 100, "type": "FIGHTING", "stab": False})
+elif starter_choice == "BLAZIKEN":
+    moves = ({"name": "EARTHQUAKE", "label": earthquake, "damage": 100, "accuracy": 100, "type": "GROUND", "stab": False},
+             {"name": "BLAZE KICK", "label": blaze_kick, "damage": 85, "accuracy": 90, "type": "FIRE", "stab": True},
+             {"name": "FLAMETHROWER", "label": flamethrower, "damage": 90, "accuracy": 100, "type": "FIRE", "stab": True},
+             {"name": "FIRE BLAST", "label": fire_blast, "damage": 110, "accuracy": 85, "type": "FIRE", "stab": True})
+elif starter_choice == "SWAMPERT":
+    moves = ({"name": "EARTHQUAKE", "label": earthquake, "damage": 100, "accuracy": 100, "type": "GROUND", "stab": True},
+             {"name": "HYDRO PUMP", "label": hydro_pump, "damage": 110, "accuracy": 85, "type": "WATER", "stab": True},
+             {"name": "HAMMER ARM", "label": hammer_arm, "damage": 100, "accuracy": 90, "type": "FIGHTING", "stab": False},
+             {"name": "WATER PULSE", "label": water_pulse, "damage": 60, "accuracy": 100, "type": "WATER", "stab": True})
+    
+eevee_moves = ({"name": "TACKLE", "damage": 40, "accuracy": 100, "type": "NORMAL", "stab": True},
+               {"name": "TAKE DOWN", "damage": 90, "accuracy": 85, "type": "NORMAL", "stab": True},
+               {"name": "SPLASH", "damage": 0, "accuracy": 100, "type": "NORMAL", "stab": True},
+               {"name": "DOUBLE KICK", "damage": 60, "accuracy": 100, "type": "FIGHTING", "stab": False})
 
-hide_show_moves("show")
+garchomp_moves = ({"name": "BITE", "damage": 60, "accuracy": 100, "type": "DARK", "stab": False},
+                  {"name": "TAKE DOWN", "damage": 90, "accuracy": 85, "type": "NORMAL", "stab": False},
+                  {"name": "DRAGON TAIL", "damage": 60, "accuracy": 90, "type": "DRAGON", "stab": True},
+                  {"name": "TACKLE", "damage": 40, "accuracy": 100, "type": "NORMAL", "stab": False})
+
+lucario_moves = ({"name": "METAL CLAW", "damage": 50, "accuracy": 95, "type": "STEEL", "stab": True},
+                 {"name": "ROCK SMASH", "damage": 40, "accuracy": 100, "type": "FIGHTING", "stab": True},
+                 {"name": "FORCE PALM", "damage": 60, "accuracy": 100, "type": "FIGHTING", "stab": True},
+                 {"name": "TRAILBLAZE", "damage": 50, "accuracy": 100, "type": "GRASS", "stab": False})
+
+yveltal_moves = ({"name": "OBLIVION WING", "damage": 80, "accuracy": 100, "type": "FLYING", "stab": True},
+                 {"name": "DRAGON RUSH", "damage": 100, "accuracy": 75, "type": "DRAGON", "stab": False},
+                 {"name": "HURRICANE", "damage": 110, "accuracy": 70, "type": "FLYING", "stab": True},
+                 {"name": "PSYCHIC", "damage": 90, "accuracy": 100, "type": "PSYCHIC", "stab": False})
+
+damage, effectiveness, punctuation = calc_damage(swampert_stats, moves[1])
+
+hide_show_moves("hide")
 current_move = 0
-
+display_move_used = makeLabel(f"{starter_choice} used {moves[current_move]['name']}!", 40, 40, 290, "black", "Agency FB")
+display_effectiveness = makeLabel(f"It was {effectiveness} effective{punctuation}", 40, 40, 330, "black", "Agency FB")
+showLabel(display_move_used)
+showLabel(display_effectiveness)
 # setup for the clock function
 next_frame = clock()
 frame = 0
@@ -171,13 +212,13 @@ move_type = makeLabel("", 0, 0, 0)
 # the actual running game
 while True:
     if clock() > next_frame:
-        if starter_choice == 1:
+        if starter_choice == "SCEPTILE":
             frame = (frame + 1)%27
             next_frame += 40 
-        elif starter_choice == 2:
+        elif starter_choice == "BLAZIKEN":
             frame = (frame + 1)%16
             next_frame += 40 
-        elif starter_choice == 3:
+        elif starter_choice == "SWAMPERT":
             frame = (frame + 1)%34
             next_frame += 40 
 
@@ -194,11 +235,11 @@ while True:
 
     if keyPressed("y"):
         attacking = True
-    elif starter_choice == 1:
+    elif starter_choice == "SCEPTILE":
         changeSpriteImage(sceptile_sprite,0 * 13 + frame)
-    elif starter_choice == 2:
+    elif starter_choice == "BLAZIKEN":
         changeSpriteImage(blaziken_sprite,0 * 16 + frame)
-    elif starter_choice == 3:
+    elif starter_choice == "SWAMPERT":
         changeSpriteImage(swampert_sprite,0 * 34 + frame)
 
     if keyPressed("right"):
@@ -219,17 +260,17 @@ while True:
         current_move = (current_move - 1)%4
 
     if attacking == True:
-        if starter_choice == 1:
+        if starter_choice == "SCEPTILE":
             for i in range(10):
                 changeSpriteImage(sceptile_sprite, 10 + i)
                 pause(40, True)
             attacking = False
-        elif starter_choice == 2:
+        elif starter_choice == "BLAZIKEN":
             for i in range(16):
                 changeSpriteImage(blaziken_sprite, 16 + i)
                 pause(20, True)
             attacking = False
-        elif starter_choice == 3:
+        elif starter_choice == "SWAMPERT":
             for i in range(10):
                 changeSpriteImage(swampert_sprite, i)
                 pause(40, True)
