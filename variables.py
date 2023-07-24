@@ -48,30 +48,3 @@ yveltal_moves = ({"name": "OBLIVION WING", "damage": 80, "accuracy": 100, "type"
                  {"name": "HURRICANE", "damage": 110, "accuracy": 70, "type": "FLYING", "stab": True},
                  {"name": "PSYCHIC", "damage": 90, "accuracy": 100, "type": "PSYCHIC", "stab": False})
 
-# create all of the sprites and labels for the game.
-background_sprite = makeSprite('sprites/battle background.png')
-blaziken_sprite = makeSprite("sprites/blaziken final full.png", 33)
-sceptile_sprite = makeSprite('sprites/sceptile final.png', 27)
-swampert_sprite = makeSprite('sprites/swampert final.png', 34)
-eevee_sprite = makeSprite("sprites/eevee.png")
-battle_menu = makeSprite("sprites/battle menu.png", 4)
-text_display = makeSprite("sprites/text display.png")
-earthquake = makeLabel("EARTHQUAKE", 30, 40, 290, "black", "Agency FB")
-blaze_kick = makeLabel("BLAZE KICK", 30, 230, 290, "black", "Agency FB")
-flamethrower = makeLabel("FLAMETHROWER", 30, 40, 343, "black", "Agency FB")
-fire_blast = makeLabel("FIRE BLAST", 30, 230, 343, "black", "Agency FB")
-energy_ball = makeLabel("ENERGY BALL", 30, 40, 290, "black", "Agency FB")
-x_scissor = makeLabel("X-SCISSOR", 30, 230, 290, "black", "Agency FB")
-iron_tail = makeLabel("IRON TAIL", 30, 40, 343, "black", "Agency FB")
-brick_break = makeLabel("BRICK BREAK", 30, 230, 343, "black", "Agency FB")
-hydro_pump = makeLabel("HYDRO PUMP", 30, 230, 290, "black", "Agency FB")
-hammer_arm = makeLabel("HAMMER ARM", 30, 40, 343, "black", "Agency FB")
-water_pulse = makeLabel("WATER PULSE", 30, 230, 343, "black", "Agency FB")
-# stats for all pokemon
-eevee_stats = {"type": "NORMAL", "type 2": "NONE", "health": 100, "defense": 1}
-lucario_stats = {"type": "FIGHTING", "type 2": "STEEL", "health": 100, "defense": 0.9}
-garchomp_stats = {"type": "DRAGON", "type 2": "NONE", "health": 100, "defense": 0.8}
-yveltal_stats = {"type": "DARK", "type 2": "FLYING", "health": 100, "defense": 0.7}
-blaziken_stats = {"type": "FIRE", "type 2": "FIGHTING", "health": 100, "defense": 0.5}
-swampert_stats = {"type": "WATER", "type 2": "GROUND", "health": 100, "defense": 0.5}
-sceptile_stats = {"type": "GRASS", "type 2": "NONE", "health": 100, "defense": 0.5}
