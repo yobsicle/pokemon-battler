@@ -69,7 +69,7 @@ def calc_damage(target_stats, move):
     else:
         stab_multi = 1
     if random.randint(0,100) <= move["accuracy"]:
-        damage = 0
+        damage = move["damage"] * stab_multi * type_multiplier * target_stats["defense"]
     else:
         damage = 0
     if type_multiplier >= 2:
@@ -130,10 +130,12 @@ type_effectiveness = {"FIRE": {"FIRE": 0.5, "WATER": 0.5, "GRASS": 2, "NORMAL": 
                       "NONE": {"FIRE": 1, "WATER": 1, "GRASS": 1, "NORMAL": 1, "FIGHTING": 1, "GROUND": 1, "DRAGON": 1,
                                   "STEEL": 1, "DARK": 1, "FLYING": 1, "PSYCHIC": 1, "BUG": 1, "NONE": 1}}
 # stats for all pokemon
-eevee_stats = {"type": "NORMAL", "health": 100, "defense": 100}
-blaziken_stats = {"type": "FIRE", "type 2": "FIGHTING", "health": 100, "defense": 100}
-swampert_stats = {"type": "WATER", "type 2": "GROUND", "health": 100, "defense": 100}
-current_selection = 0
+eevee_stats = {"type": "NORMAL", "type 2": "NONE", "health": 100, "defense": 1}
+lucario_stats = {"type": "FIGHTING", "type 2": "STEEL", "health": 100, "defense": 0.9}
+garchomp_stats = {"type": "DRAGON", "type 2": "NONE", "health": 100, "defense": 0.8}
+yveltal_stats = {"type": "DARK", "type 2": "FLYING", "health": 100, "defense": 0.7}
+blaziken_stats = {"type": "FIRE", "type 2": "FIGHTING", "health": 100, "defense": 0.5}
+swampert_stats = {"type": "WATER", "type 2": "GROUND", "health": 100, "defense": 0.5}
 
 # move, show, transform all the sprites and labels so they look right
 # and appear in the correct position.
@@ -156,6 +158,8 @@ transformSprite(text_display, 0, 2.55)
 moveSprite(text_display, 0, 280)
 # showSprite(battle_menu)
 showSprite(text_display)
+
+current_selection = 0
 
 if starter_choice == "SCEPTILE":
     # format: move name, damage, accuracy, type, has stab
@@ -194,8 +198,6 @@ yveltal_moves = ({"name": "OBLIVION WING", "damage": 80, "accuracy": 100, "type"
                  {"name": "HURRICANE", "damage": 110, "accuracy": 70, "type": "FLYING", "stab": True},
                  {"name": "PSYCHIC", "damage": 90, "accuracy": 100, "type": "PSYCHIC", "stab": False})
 
-damage, effectiveness, punctuation = calc_damage(swampert_stats, moves[1])
-
 hide_show_moves("hide")
 current_move = 0
 display_move_used = makeLabel(f"{starter_choice} used {moves[current_move]['name']}!", 40, 40, 290, "black", "Agency FB")
@@ -233,9 +235,7 @@ while True:
     move_type = makeLabel(f"{moves[current_move]['type']}", 28, 485, 344, "black", "Agency FB")
     showLabel(move_type)
 
-    if keyPressed("y"):
-        attacking = True
-    elif starter_choice == "SCEPTILE":
+    if starter_choice == "SCEPTILE":
         changeSpriteImage(sceptile_sprite,0 * 13 + frame)
     elif starter_choice == "BLAZIKEN":
         changeSpriteImage(blaziken_sprite,0 * 16 + frame)
@@ -258,7 +258,10 @@ while True:
         current_selection = (current_selection - 1)%4
         changeSpriteImage(battle_menu, current_selection)
         current_move = (current_move - 1)%4
-
+    elif keyPressed("enter"):
+        damage, effectiveness, punctuation = calc_damage(blaziken_stats, moves[current_move - 1])
+        display_move_used = makeLabel(f"{starter_choice} used {moves[current_move - 1]['name']}!", 40, 40, 290, "black", "Agency FB")
+        display_effectiveness = makeLabel(f"It was {effectiveness} effective{punctuation}", 40, 40, 330, "black", "Agency FB")
     if attacking == True:
         if starter_choice == "SCEPTILE":
             for i in range(10):
