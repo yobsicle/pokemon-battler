@@ -85,18 +85,6 @@ def calc_damage(target_stats, move):
     return damage, effectiveness, punctuation
 
 
-def update_move_display():
-    # make the damage/acc label
-    hideLabel(damage_acc)
-    damage_acc = makeLabel(f"{moves[current_move]['damage']}/{moves[current_move]['accuracy']}", 26, 526, 302, "black", "Agency FB")
-    showLabel(damage_acc)
-
-    # make the move type label
-    hideLabel(move_type)
-    move_type = makeLabel(f"{moves[current_move]['type']}", 28, 485, 344, "black", "Agency FB")
-    showLabel(move_type)
-
-
 # create all of the sprites and labels for the game.
 background_sprite = makeSprite('sprites/battle background.png')
 blaziken_sprite = makeSprite("sprites/blaziken final full.png", 33)
@@ -121,9 +109,12 @@ eevee_stats = {"type": "NORMAL", "type 2": "NONE", "health": 100, "defense": 1}
 lucario_stats = {"type": "FIGHTING", "type 2": "STEEL", "health": 100, "defense": 0.9}
 garchomp_stats = {"type": "DRAGON", "type 2": "NONE", "health": 100, "defense": 0.8}
 yveltal_stats = {"type": "DARK", "type 2": "FLYING", "health": 100, "defense": 0.7}
-blaziken_stats = {"type": "FIRE", "type 2": "FIGHTING", "health": 100, "defense": 0.5}
-swampert_stats = {"type": "WATER", "type 2": "GROUND", "health": 100, "defense": 0.5}
-sceptile_stats = {"type": "GRASS", "type 2": "NONE", "health": 100, "defense": 0.5}
+if starter_choice == "BLAZIKEN":
+    starter_stats = {"type": "FIRE", "type 2": "FIGHTING", "health": 100, "defense": 0.5}
+elif starter_choice == "SWAMPERT":
+    starter_stats = {"type": "WATER", "type 2": "GROUND", "health": 100, "defense": 0.5}
+elif starter_choice == "SCEPTILE":
+    starter_stats = {"type": "GRASS", "type 2": "NONE", "health": 100, "defense": 0.5}
 
 # move, show, transform all the sprites and labels so they look right
 # and appear in the correct position.
@@ -189,6 +180,15 @@ while True:
             next_frame += 40
 
     tick(12)
+    # make the damage/acc label
+    hideLabel(damage_acc)
+    damage_acc = makeLabel(f"{moves[current_move]['damage']}/{moves[current_move]['accuracy']}", 26, 526, 302, "black", "Agency FB")
+    showLabel(damage_acc)
+
+    # make the move type label
+    hideLabel(move_type)
+    move_type = makeLabel(f"{moves[current_move]['type']}", 28, 485, 344, "black", "Agency FB")
+    showLabel(move_type)
 
     if starter_choice == "SCEPTILE":
         changeSpriteImage(sceptile_sprite, 0 * 13 + frame)
@@ -201,24 +201,20 @@ while True:
         current_selection = (current_selection + 1) % 4
         changeSpriteImage(battle_menu, current_selection)
         current_move = (current_move + 1) % 4
-        update_move_display()
     elif keyPressed("down"):
         current_selection = (current_selection + 1) % 4
         changeSpriteImage(battle_menu, current_selection)
         current_move = (current_move + 1) % 4
-        update_move_display()
     elif keyPressed("up"):
         current_selection = (current_selection - 1) % 4
         changeSpriteImage(battle_menu, current_selection)
         current_move = (current_move - 1) % 4
-        update_move_display()
     elif keyPressed("left"):
         current_selection = (current_selection - 1) % 4
         changeSpriteImage(battle_menu, current_selection)
         current_move = (current_move - 1) % 4
-        update_move_display()
     elif keyPressed("enter"):
-        damage, effectiveness, punctuation = calc_damage(blaziken_stats, moves[current_move - 1])
+        damage, effectiveness, punctuation = calc_damage(starter_stats, moves[current_move - 1])
         display_move_used = makeLabel(f"{starter_choice} used {moves[current_move - 1]['name']}!", 40, 40, 290, "black", "Agency FB")
         display_effectiveness = makeLabel(f"It was {effectiveness} effective{punctuation}", 40, 40, 330, "black", "Agency FB")
         showLabel(display_move_used)
