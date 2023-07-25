@@ -93,6 +93,7 @@ swampert_sprite = makeSprite('sprites/swampert final.png', 34)
 eevee_sprite = makeSprite("sprites/eevee.png")
 battle_menu = makeSprite("sprites/battle menu.png", 4)
 text_display = makeSprite("sprites/text display.png")
+trivia_display = makeSprite("sprites/trivia display.png")
 earthquake = makeLabel("EARTHQUAKE", 30, 40, 290, "black", "Agency FB")
 blaze_kick = makeLabel("BLAZE KICK", 30, 230, 290, "black", "Agency FB")
 flamethrower = makeLabel("FLAMETHROWER", 30, 40, 343, "black", "Agency FB")
@@ -136,7 +137,6 @@ moveSprite(battle_menu, 0, 280)
 transformSprite(text_display, 0, 2.55)
 moveSprite(text_display, 0, 280)
 showSprite(battle_menu)
-# showSprite(text_display)
 
 current_selection = 0
 
@@ -148,8 +148,8 @@ if starter_choice == "SCEPTILE":
              {"name": "BRICK BREAK", "label": brick_break, "damage": 75, "accuracy": 100, "type": "FIGHTING", "stab": False})
 elif starter_choice == "BLAZIKEN":
     moves = ({"name": "EARTHQUAKE", "label": earthquake, "damage": 100, "accuracy": 100, "type": "GROUND", "stab": False},
-             {"name": "BLAZE KICK", "label": blaze_kick, "damage": 85, "accuracy": 90, "type": "FIRE", "stab": True},
              {"name": "FLAMETHROWER", "label": flamethrower, "damage": 90, "accuracy": 100, "type": "FIRE", "stab": True},
+             {"name": "BLAZE KICK", "label": blaze_kick, "damage": 85, "accuracy": 90, "type": "FIRE", "stab": True},
              {"name": "FIRE BLAST", "label": fire_blast, "damage": 110, "accuracy": 85, "type": "FIRE", "stab": True})
 elif starter_choice == "SWAMPERT":
     moves = ({"name": "EARTHQUAKE", "label": earthquake, "damage": 100, "accuracy": 100, "type": "GROUND", "stab": True},
@@ -213,10 +213,14 @@ while True:
         current_selection = (current_selection - 1) % 4
         changeSpriteImage(battle_menu, current_selection)
         current_move = (current_move - 1) % 4
-    elif keyPressed("enter"):
-        damage, effectiveness, punctuation = calc_damage(starter_stats, moves[current_move - 1])
-        display_move_used = makeLabel(f"{starter_choice} used {moves[current_move - 1]['name']}!", 40, 40, 290, "black", "Agency FB")
-        display_effectiveness = makeLabel(f"It was {effectiveness} effective{punctuation}", 40, 40, 330, "black", "Agency FB")
+    elif keyPressed("return"):
+        print(current_move)
+        hide_show_moves("hide")
+        hideSprite(battle_menu)
+        showSprite(text_display)
+        damage, effectiveness, punctuation = calc_damage(starter_stats, moves[current_move])
+        display_move_used = makeLabel(f"{starter_choice} used {moves[current_move]['name']}!", 40, 40, 290, "white", "Agency FB")
+        display_effectiveness = makeLabel(f"It was {effectiveness} effective{punctuation}", 40, 40, 330, "white", "Agency FB")
         showLabel(display_move_used)
         showLabel(display_effectiveness)
     if attacking is True:
