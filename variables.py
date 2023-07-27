@@ -76,7 +76,7 @@ it is impossible to obtain Golem in red and blue""",
 """Ponyta is able to jump over the eiffel tower
 in one leap.""",
 """Shiny Kantoan grimer is the same colour as
-Alolan grimerand Shiny Alolan grimer is the same
+Alolan grimer and Shiny Alolan grimer is the same
 colour as kantoan grimer.""",
 """Arcanine was originally supposed to be a legendary
 Pokemon.""",

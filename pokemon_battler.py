@@ -91,6 +91,9 @@ blaziken_sprite = makeSprite("sprites/blaziken final full.png", 33)
 sceptile_sprite = makeSprite('sprites/sceptile final.png', 27)
 swampert_sprite = makeSprite('sprites/swampert final.png', 34)
 eevee_sprite = makeSprite("sprites/eevee.png")
+lucario_sprite = makeSprite("sprites/lucario.png")
+garchomp_sprite = makeSprite("sprites/garchomp.png")
+yveltal_sprite = makeSprite("sprites/yveltal.png")
 battle_menu = makeSprite("sprites/battle menu.png", 4)
 text_display = makeSprite("sprites/text display.png")
 trivia_display = makeSprite("sprites/trivia display.png")
@@ -125,6 +128,12 @@ showSprite(background_sprite)
 showSprite(eevee_sprite)
 moveSprite(eevee_sprite, 450, 100, True)
 transformSprite(eevee_sprite, 0, 0.35)
+moveSprite(lucario_sprite, 450, 100, True)
+transformSprite(lucario_sprite, 0, 0.45)
+moveSprite(garchomp_sprite, 450, 100, True)
+transformSprite(garchomp_sprite, 0, 0.6)
+moveSprite(yveltal_sprite, 440, 130, True)
+transformSprite(yveltal_sprite, 0, 0.35)
 moveSprite(blaziken_sprite, 150, 250, True)
 moveSprite(sceptile_sprite, 150, 250, True)
 moveSprite(swampert_sprite, 150, 250, True)
@@ -164,8 +173,10 @@ next_frame = clock()
 frame = 0
 attacking = False
 
-damage_acc = makeLabel("", 0, 0, 0)
-move_type = makeLabel("", 0, 0, 0)
+damage_acc = makeLabel( f"{moves[current_move]['damage']}/{moves[current_move]['accuracy']}", 28, 485, 344, "black", "Agency FB")
+move_type = makeLabel(f"{moves[current_move]['type']}", 26, 526, 302, "black", "Agency FB")
+showLabel(damage_acc)
+showLabel(move_type)
 # the actual running game
 while True:
     if clock() > next_frame:
@@ -180,16 +191,7 @@ while True:
             next_frame += 40
 
     tick(12)
-    # make the damage/acc label
-    hideLabel(damage_acc)
-    damage_acc = makeLabel(f"{moves[current_move]['damage']}/{moves[current_move]['accuracy']}", 26, 526, 302, "black", "Agency FB")
-    showLabel(damage_acc)
-
-    # make the move type label
-    hideLabel(move_type)
-    move_type = makeLabel(f"{moves[current_move]['type']}", 28, 485, 344, "black", "Agency FB")
-    showLabel(move_type)
-
+    
     if starter_choice == "SCEPTILE":
         changeSpriteImage(sceptile_sprite, 0 * 13 + frame)
     elif starter_choice == "BLAZIKEN":
@@ -201,28 +203,48 @@ while True:
         current_selection = (current_selection + 1) % 4
         changeSpriteImage(battle_menu, current_selection)
         current_move = (current_move + 1) % 4
+        changeLabel(damage_acc, f"{moves[current_move]['damage']}/{moves[current_move]['accuracy']}")
+        changeLabel(move_type, f"{moves[current_move]['type']}")
     elif keyPressed("down"):
         current_selection = (current_selection + 1) % 4
         changeSpriteImage(battle_menu, current_selection)
         current_move = (current_move + 1) % 4
+        changeLabel(damage_acc, f"{moves[current_move]['damage']}/{moves[current_move]['accuracy']}")
+        changeLabel(move_type, f"{moves[current_move]['type']}")
     elif keyPressed("up"):
         current_selection = (current_selection - 1) % 4
         changeSpriteImage(battle_menu, current_selection)
         current_move = (current_move - 1) % 4
+        changeLabel(damage_acc, f"{moves[current_move]['damage']}/{moves[current_move]['accuracy']}")
+        changeLabel(move_type, f"{moves[current_move]['type']}")
     elif keyPressed("left"):
         current_selection = (current_selection - 1) % 4
         changeSpriteImage(battle_menu, current_selection)
         current_move = (current_move - 1) % 4
+        changeLabel(damage_acc, f"{moves[current_move]['damage']}/{moves[current_move]['accuracy']}")
+        changeLabel(move_type, f"{moves[current_move]['type']}")
     elif keyPressed("return"):
-        print(current_move)
-        hide_show_moves("hide")
-        hideSprite(battle_menu)
-        showSprite(text_display)
-        damage, effectiveness, punctuation = calc_damage(starter_stats, moves[current_move])
-        display_move_used = makeLabel(f"{starter_choice} used {moves[current_move]['name']}!", 40, 40, 290, "white", "Agency FB")
-        display_effectiveness = makeLabel(f"It was {effectiveness} effective{punctuation}", 40, 40, 330, "white", "Agency FB")
-        showLabel(display_move_used)
-        showLabel(display_effectiveness)
+        damage_calculating = True
+        while damage_calculating is True:
+            hideLabel(damage_acc)
+            hideLabel(move_type)
+            hide_show_moves("hide")
+            hideSprite(battle_menu)
+            showSprite(text_display)
+            damage, effectiveness, punctuation = calc_damage(starter_stats, moves[current_move])
+            display_move_used = makeLabel(f"{starter_choice} used {moves[current_move]['name']}!", 40, 40, 290, "white", "Agency FB")
+            display_effectiveness = makeLabel(f"It was {effectiveness} effective{punctuation}", 40, 40, 330, "white", "Agency FB")
+            showLabel(display_move_used)
+            showLabel(display_effectiveness)
+            pause(2000)
+            hideLabel(display_move_used)
+            hideLabel(display_effectiveness)
+            hide_show_moves("show")
+            hideSprite(text_display)
+            showSprite(battle_menu)
+            showLabel(damage_acc)
+            showLabel(move_type)
+            damage_calculating = False
     if attacking is True:
         if starter_choice == "SCEPTILE":
             for i in range(10):
