@@ -48,3 +48,38 @@ yveltal_moves = ({"name": "OBLIVION WING", "damage": 80, "accuracy": 100, "type"
                  {"name": "HURRICANE", "damage": 110, "accuracy": 70, "type": "FLYING", "stab": True},
                  {"name": "PSYCHIC", "damage": 90, "accuracy": 100, "type": "PSYCHIC", "stab": False})
 
+trivia = ("""Pikachu wasn't supposed to be the mascot;
+it was originally going to be poliwhirl or clefairy.""",
+"""Rhydon was the first pokemon ever created.""",
+"""in 2008, japanese scientists discovered a new enzyme
+which they named pikachurin.""",
+"""Pikachu is featured on legal tender.
+There was a print run of the niuean 1$ coin that has
+pikachu on one side of it.""",
+"""Victini is the only pokemon that is registered
+as #0 in the pokedex.""",
+"""Wailord, the blue whale sized pokemon,
+is lighter than the average human adult.""",
+"""Parasect's pokedex entry is the only one
+that ever mentions a real country. (china)""",
+"""Arbok has different patterns on its chest 
+depending on region.""",
+"""Alolan dugtrio is worshipped as a deity in Alola""",
+"""Misty's psyduck took 942 episodes to use water gun
+successfully""",
+"""Abra and Kadabra were originally supposed to be
+named hocus and pocus.""",
+"""Tentacool is 99% water.
+the other 1 percent is made of poison.""",
+"""If you don't have any friends,
+it is impossible to obtain Golem in red and blue""",
+"""Ponyta is able to jump over the eiffel tower
+in one leap.""",
+"""Shiny Kantoan grimer is the same colour as
+Alolan grimerand Shiny Alolan grimer is the same
+colour as kantoan grimer.""",
+"""Arcanine was originally supposed to be a legendary
+Pokemon.""",
+"""Pokemon is short for Pocket Monsters.""",
+"""Ruby and sapphire are the only games where
+you have can meet your father.""")
