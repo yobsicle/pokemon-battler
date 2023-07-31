@@ -108,6 +108,7 @@ brick_break = makeLabel("BRICK BREAK", 30, 230, 343, "black", "Agency FB")
 hydro_pump = makeLabel("HYDRO PUMP", 30, 230, 290, "black", "Agency FB")
 hammer_arm = makeLabel("HAMMER ARM", 30, 40, 343, "black", "Agency FB")
 water_pulse = makeLabel("WATER PULSE", 30, 230, 343, "black", "Agency FB")
+trivia_label = makeLabel("", 30, 0, 0, "white", "Agency FB")
 # stats for all pokemon
 eevee_stats = {"type": "NORMAL", "type 2": "NONE", "health": 100, "defense": 1}
 lucario_stats = {"type": "FIGHTING", "type 2": "STEEL", "health": 100, "defense": 0.9}
@@ -274,9 +275,14 @@ while True:
         while showing_trivia is True:
             hide_show_starter("hide")
             hide_show_moves("hide")
+            hideLabel(enemy_hp)
+            hideLabel(player_hp)
             hideLabel(damage_acc)
             hideLabel(move_type)
             hideSprite(battle_menu)
             showSprite(trivia_display)
+            trivia_index = random.randint(0, len(trivia) - 1)
+            changeLabel(trivia_label, f"Fun fact:<br>{trivia[trivia_index]}")
+            showLabel(trivia_label)
             endWait()
 endWait()
