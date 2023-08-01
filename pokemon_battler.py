@@ -173,8 +173,8 @@ next_frame = clock()
 frame = 0
 attacking = False
 
-damage_acc = makeLabel( f"{moves[current_move]['damage']}/{moves[current_move]['accuracy']}", 28, 485, 344, "black", "Agency FB")
-move_type = makeLabel(f"{moves[current_move]['type']}", 26, 526, 302, "black", "Agency FB")
+damage_acc = makeLabel( f"{moves[current_move]['damage']}/{moves[current_move]['accuracy']}", 28, 526, 301, "black", "Agency FB")
+move_type = makeLabel(f"{moves[current_move]['type']}", 28, 485, 343, "black", "Agency FB")
 showLabel(damage_acc)
 showLabel(move_type)
 enemy_current_hp = eevee_stats["health"]
