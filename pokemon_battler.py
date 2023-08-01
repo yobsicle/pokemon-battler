@@ -24,12 +24,12 @@ Enter choice here: """))
             choosing_starter = False
     except ValueError:
         print("Please enter a valid number from 1-3")
-    if starter_choice == 1:
-        starter_choice = "SCEPTILE"
-    elif starter_choice == 2:
-        starter_choice = "BLAZIKEN"
-    elif starter_choice == 3:
-        starter_choice = "SWAMPERT"
+if starter_choice == 1:
+    starter_choice = "SCEPTILE"
+elif starter_choice == 2:
+    starter_choice = "BLAZIKEN"
+elif starter_choice == 3:
+    starter_choice = "SWAMPERT"
 
 
 # functions that hide/show certain things.
@@ -72,7 +72,7 @@ def calc_damage(target_stats, move):
     if random.randint(0, 100) <= move["accuracy"]:
         damage = move["damage"] * stab_multi * type_multiplier * target_stats["defense"]
     else:
-        damage = 0
+        damage = "missed"
     if type_multiplier >= 2:
         effectiveness = "super"
         punctuation = "!"
@@ -82,6 +82,7 @@ def calc_damage(target_stats, move):
     else:
         effectiveness = ""
         punctuation = ""
+    print(damage)
     return damage, effectiveness, punctuation
 
 
@@ -108,18 +109,18 @@ brick_break = makeLabel("BRICK BREAK", 30, 230, 343, "black", "Agency FB")
 hydro_pump = makeLabel("HYDRO PUMP", 30, 230, 290, "black", "Agency FB")
 hammer_arm = makeLabel("HAMMER ARM", 30, 40, 343, "black", "Agency FB")
 water_pulse = makeLabel("WATER PULSE", 30, 230, 343, "black", "Agency FB")
-trivia_label = makeLabel("", 30, 0, 0, "white", "Agency FB")
+trivia_label = makeLabel("", 30, 50, 50, "white", "Agency FB")
 # stats for all pokemon
-eevee_stats = {"type": "NORMAL", "type 2": "NONE", "health": 100, "defense": 1}
+eevee_stats = {"type": "NORMAL", "type 2": "NONE", "health": 175, "defense": 1}
 lucario_stats = {"type": "FIGHTING", "type 2": "STEEL", "health": 100, "defense": 0.9}
 garchomp_stats = {"type": "DRAGON", "type 2": "NONE", "health": 100, "defense": 0.8}
 yveltal_stats = {"type": "DARK", "type 2": "FLYING", "health": 100, "defense": 0.7}
 if starter_choice == "BLAZIKEN":
-    starter_stats = {"type": "FIRE", "type 2": "FIGHTING", "health": 100, "defense": 0.5}
+    starter_stats = {"type": "FIRE", "type 2": "FIGHTING", "health": 250, "defense": 0.45}
 elif starter_choice == "SWAMPERT":
-    starter_stats = {"type": "WATER", "type 2": "GROUND", "health": 100, "defense": 0.5}
+    starter_stats = {"type": "WATER", "type 2": "GROUND", "health": 250, "defense": 0.45}
 elif starter_choice == "SCEPTILE":
-    starter_stats = {"type": "GRASS", "type 2": "NONE", "health": 100, "defense": 0.5}
+    starter_stats = {"type": "GRASS", "type 2": "NONE", "health": 250, "defense": 0.45}
 
 # move, show, transform all the sprites and labels so they look right
 # and appear in the correct position.
@@ -147,8 +148,6 @@ moveSprite(battle_menu, 0, 280)
 transformSprite(text_display, 0, 2.55)
 moveSprite(text_display, 0, 280)
 showSprite(battle_menu)
-
-current_selection = 0
 
 if starter_choice == "SCEPTILE":
     # format: move name, damage, accuracy, type, has stab
@@ -180,12 +179,13 @@ showLabel(damage_acc)
 showLabel(move_type)
 enemy_current_hp = eevee_stats["health"]
 player_current_hp = starter_stats["health"]
-enemy_hp = makeLabel(f"hp: {enemy_current_hp}/{eevee_stats['health']}", 30, 390, 200, "black", "Agency FB")
-player_hp = makeLabel(f"hp: {player_current_hp}/{starter_stats['health']}", 30, 100, 110, "black", "Agency FB")
+enemy_hp = makeLabel(f"hp: {round(enemy_current_hp / eevee_stats['health'] * 100, 1)}%", 30, 390, 200, "black", "Agency FB")
+player_hp = makeLabel(f"hp: {round(player_current_hp / starter_stats['health'] * 100, 1)}%", 30, 100, 110, "black", "Agency FB")
 showLabel(enemy_hp)
 showLabel(player_hp)
 # the actual running game
 while True:
+    # the clock to set the framerate of the animations.
     if clock() > next_frame:
         if starter_choice == "SCEPTILE":
             frame = (frame + 1) % 27
@@ -197,8 +197,10 @@ while True:
             frame = (frame + 1) % 34
             next_frame += 40
 
+    # program's running framerate.
     tick(12)
     
+    # animate the starter.
     if starter_choice == "SCEPTILE":
         changeSpriteImage(sceptile_sprite, 0 * 13 + frame)
     elif starter_choice == "BLAZIKEN":
@@ -206,70 +208,100 @@ while True:
     elif starter_choice == "SWAMPERT":
         changeSpriteImage(swampert_sprite, 0 * 34 + frame)
 
+    # run if the user presses the "right" button.
     if keyPressed("right"):
-        current_selection = (current_selection + 1) % 4
-        changeSpriteImage(battle_menu, current_selection)
+        # increment the current selected move
         current_move = (current_move + 1) % 4
+        # change the menu sprite to reflect the selected move
+        changeSpriteImage(battle_menu, current_move)
+        # change the damage/acc and move type labels to match the current selected move
         changeLabel(damage_acc, f"{moves[current_move]['damage']}/{moves[current_move]['accuracy']}")
         changeLabel(move_type, f"{moves[current_move]['type']}")
     elif keyPressed("down"):
-        current_selection = (current_selection + 1) % 4
-        changeSpriteImage(battle_menu, current_selection)
+        # increment the current selected move
         current_move = (current_move + 1) % 4
+        # change the menu sprite to reflect the selected move
+        changeSpriteImage(battle_menu, current_move)
+        # change the damage/acc and move type labels to match the current selected move
         changeLabel(damage_acc, f"{moves[current_move]['damage']}/{moves[current_move]['accuracy']}")
         changeLabel(move_type, f"{moves[current_move]['type']}")
     elif keyPressed("up"):
-        current_selection = (current_selection - 1) % 4
-        changeSpriteImage(battle_menu, current_selection)
+        # increment the current selected move
         current_move = (current_move - 1) % 4
+         # change the menu sprite to reflect the selected move
+        changeSpriteImage(battle_menu, current_move)
+        # change the damage/acc and move type labels to match the current selected move
         changeLabel(damage_acc, f"{moves[current_move]['damage']}/{moves[current_move]['accuracy']}")
         changeLabel(move_type, f"{moves[current_move]['type']}")
     elif keyPressed("left"):
-        current_selection = (current_selection - 1) % 4
-        changeSpriteImage(battle_menu, current_selection)
+        # increment the current selected move
         current_move = (current_move - 1) % 4
+         # change the menu sprite to reflect the selected move
+        changeSpriteImage(battle_menu, current_move)
+        # change the damage/acc and move type labels to match the current selected move
         changeLabel(damage_acc, f"{moves[current_move]['damage']}/{moves[current_move]['accuracy']}")
         changeLabel(move_type, f"{moves[current_move]['type']}")
     elif keyPressed("return"):
-        damage_calculating = True
-        while damage_calculating is True:
-            hideLabel(damage_acc)
-            hideLabel(move_type)
-            hide_show_moves("hide")
-            hideSprite(battle_menu)
-            showSprite(text_display)
-            damage, effectiveness, punctuation = calc_damage(eevee_stats, moves[current_move])
-            display_move_used = makeLabel(f"{starter_choice} used {moves[current_move]['name']}!", 40, 40, 290, "white", "Agency FB")
-            display_effectiveness = makeLabel(f"It was {effectiveness} effective{punctuation}", 40, 40, 330, "white", "Agency FB")
-            showLabel(display_move_used)
-            if effectiveness == "super" or effectiveness == "not very":
-                showLabel(display_effectiveness)
-            attacking = True
-            if attacking is True:
-                if starter_choice == "SCEPTILE":
-                    for i in range(10):
-                        changeSpriteImage(sceptile_sprite, 10 + i)
-                        pause(80, True)
-                    attacking = False
-                elif starter_choice == "BLAZIKEN":
-                    for i in range(16):
-                        changeSpriteImage(blaziken_sprite, 16 + i)
-                        pause(40, True)
-                    attacking = False
-                elif starter_choice == "SWAMPERT":
-                    for i in range(10):
-                        changeSpriteImage(swampert_sprite, i)
-                        pause(80, True)
-            attacking = False
-            pause(200)
-            hideLabel(display_move_used)
-            hideLabel(display_effectiveness)
-            hide_show_moves("show")
-            hideSprite(text_display)
-            showSprite(battle_menu)
-            showLabel(damage_acc)
-            showLabel(move_type)
-            damage_calculating = False
+        # hide all the stuff in the way of the move display window.
+        hideLabel(damage_acc)
+        hideLabel(move_type)
+        hide_show_moves("hide")
+        hideSprite(battle_menu)
+        # show the move diplay window.
+        showSprite(text_display)
+        # use the damage calc function.
+        damage, effectiveness, punctuation = calc_damage(eevee_stats, moves[current_move])
+        # make the labels to display, the move, it's effectiveness, and if it hit.
+        display_move_used = makeLabel(f"{starter_choice} used {moves[current_move]['name']}!", 40, 40, 290, "white", "Agency FB")
+        display_effectiveness = makeLabel(f"It was {effectiveness} effective{punctuation}", 40, 40, 330, "white", "Agency FB")
+        move_missed = makeLabel(f"It missed!", 40, 40, 330, "white", "Agency FB")
+        # show the used move.
+        showLabel(display_move_used)
+        # run if the move misses.
+        if damage == "missed":
+            # show the move missed label.
+            showLabel(move_missed)
+        # run if the effectiveness is super or not very.
+        elif effectiveness == "super" or effectiveness == "not very":
+            # show the move effectiveness label.
+            showLabel(display_effectiveness)
+            # take the move damage away from the enemy's health.
+            enemy_current_hp -= damage
+        else:
+            # take the move damage away from the enemy's health.
+            enemy_current_hp -= damage
+        # update the enemy health label.
+        changeLabel(enemy_hp, f"hp: {round(enemy_current_hp / eevee_stats['health'] * 100, 1)}%")
+        # play the attacking animation.
+        attacking = True
+        if attacking is True:
+            if starter_choice == "SCEPTILE":
+                for i in range(10):
+                    changeSpriteImage(sceptile_sprite, 10 + i)
+                    pause(80, True)
+                attacking = False
+            elif starter_choice == "BLAZIKEN":
+                for i in range(16):
+                    changeSpriteImage(blaziken_sprite, 16 + i)
+                    pause(40, True)
+                attacking = False
+            elif starter_choice == "SWAMPERT":
+                for i in range(10):
+                    changeSpriteImage(swampert_sprite, i)
+                    pause(80, True)
+        # stop attacking
+        attacking = False
+        # pause a bit before hiding the move info display labels.
+        pause(200)
+        hideLabel(move_missed)
+        hideLabel(display_move_used)
+        hideLabel(display_effectiveness)
+        hide_show_moves("show")
+        hideSprite(text_display)
+        # re-show the move menus.
+        showSprite(battle_menu)
+        showLabel(damage_acc)
+        showLabel(move_type)
     elif keyPressed("y"):
         showing_trivia = True
         while showing_trivia is True:
