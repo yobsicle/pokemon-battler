@@ -304,6 +304,7 @@ while True:
         # pause a bit before hiding the move info display labels.
         pause(200)
         hideLabel(move_missed)
+        hideLabel(immune)
         hideLabel(display_move_used)
         hideLabel(display_effectiveness)
         hide_show_moves("show")
