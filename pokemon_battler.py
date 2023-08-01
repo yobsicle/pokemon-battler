@@ -73,7 +73,11 @@ def calc_damage(target_stats, move):
         damage = move["damage"] * stab_multi * type_multiplier * target_stats["defense"]
     else:
         damage = "missed"
-    if type_multiplier >= 2:
+    if type_multiplier == 0:
+        damage = "immune"
+        effectiveness = ""
+        punctuation = ""
+    elif type_multiplier >= 2:
         effectiveness = "super"
         punctuation = "!"
     elif type_multiplier <= 0.5:
@@ -112,9 +116,9 @@ water_pulse = makeLabel("WATER PULSE", 30, 230, 343, "black", "Agency FB")
 trivia_label = makeLabel("", 30, 50, 50, "white", "Agency FB")
 # stats for all pokemon
 eevee_stats = {"type": "NORMAL", "type 2": "NONE", "health": 175, "defense": 1}
-lucario_stats = {"type": "FIGHTING", "type 2": "STEEL", "health": 100, "defense": 0.9}
-garchomp_stats = {"type": "DRAGON", "type 2": "NONE", "health": 100, "defense": 0.8}
-yveltal_stats = {"type": "DARK", "type 2": "FLYING", "health": 100, "defense": 0.7}
+lucario_stats = {"type": "FIGHTING", "type 2": "STEEL", "health": 275, "defense": 0.8}
+garchomp_stats = {"type": "DRAGON", "type 2": "NONE", "health": 200, "defense": 0.8}
+yveltal_stats = {"type": "DARK", "type 2": "FLYING", "health": 175, "defense": 0.6}
 if starter_choice == "BLAZIKEN":
     starter_stats = {"type": "FIRE", "type 2": "FIGHTING", "health": 250, "defense": 0.45}
 elif starter_choice == "SWAMPERT":
@@ -127,14 +131,17 @@ elif starter_choice == "SCEPTILE":
 transformSprite(background_sprite, 0, 2.5)
 moveSprite(background_sprite, 0, 0)
 showSprite(background_sprite)
-showSprite(eevee_sprite)
+showSprite(yveltal_sprite)
+# showSprite(garchomp_sprite)
+# showSprite(lucario_sprite)
+# showSprite(eevee_sprite)
 moveSprite(eevee_sprite, 450, 100, True)
 transformSprite(eevee_sprite, 0, 0.35)
 moveSprite(lucario_sprite, 450, 100, True)
 transformSprite(lucario_sprite, 0, 0.45)
 moveSprite(garchomp_sprite, 450, 100, True)
 transformSprite(garchomp_sprite, 0, 0.6)
-moveSprite(yveltal_sprite, 440, 130, True)
+moveSprite(yveltal_sprite, 420, 110, True)
 transformSprite(yveltal_sprite, 0, 0.35)
 moveSprite(blaziken_sprite, 150, 250, True)
 moveSprite(sceptile_sprite, 150, 250, True)
@@ -177,9 +184,9 @@ damage_acc = makeLabel( f"{moves[current_move]['damage']}/{moves[current_move]['
 move_type = makeLabel(f"{moves[current_move]['type']}", 28, 485, 343, "black", "Agency FB")
 showLabel(damage_acc)
 showLabel(move_type)
-enemy_current_hp = eevee_stats["health"]
+enemy_current_hp = yveltal_stats["health"]
 player_current_hp = starter_stats["health"]
-enemy_hp = makeLabel(f"hp: {round(enemy_current_hp / eevee_stats['health'] * 100, 1)}%", 30, 390, 200, "black", "Agency FB")
+enemy_hp = makeLabel(f"hp: {round(enemy_current_hp / yveltal_stats['health'] * 100, 1)}%", 30, 390, 210, "black", "Agency FB")
 player_hp = makeLabel(f"hp: {round(player_current_hp / starter_stats['health'] * 100, 1)}%", 30, 100, 110, "black", "Agency FB")
 showLabel(enemy_hp)
 showLabel(player_hp)
@@ -250,11 +257,12 @@ while True:
         # show the move diplay window.
         showSprite(text_display)
         # use the damage calc function.
-        damage, effectiveness, punctuation = calc_damage(eevee_stats, moves[current_move])
+        damage, effectiveness, punctuation = calc_damage(yveltal_stats, moves[current_move])
         # make the labels to display, the move, it's effectiveness, and if it hit.
         display_move_used = makeLabel(f"{starter_choice} used {moves[current_move]['name']}!", 40, 40, 290, "white", "Agency FB")
         display_effectiveness = makeLabel(f"It was {effectiveness} effective{punctuation}", 40, 40, 330, "white", "Agency FB")
-        move_missed = makeLabel(f"It missed!", 40, 40, 330, "white", "Agency FB")
+        move_missed = makeLabel("It missed!", 40, 40, 330, "white", "Agency FB")
+        immune = makeLabel("It had no effect.", 40, 40, 330, "white", "Agency FB")
         # show the used move.
         showLabel(display_move_used)
         # run if the move misses.
@@ -262,6 +270,8 @@ while True:
             # show the move missed label.
             showLabel(move_missed)
         # run if the effectiveness is super or not very.
+        elif damage == "immune":
+            showLabel(immune)
         elif effectiveness == "super" or effectiveness == "not very":
             # show the move effectiveness label.
             showLabel(display_effectiveness)
@@ -271,7 +281,7 @@ while True:
             # take the move damage away from the enemy's health.
             enemy_current_hp -= damage
         # update the enemy health label.
-        changeLabel(enemy_hp, f"hp: {round(enemy_current_hp / eevee_stats['health'] * 100, 1)}%")
+        changeLabel(enemy_hp, f"hp: {round(enemy_current_hp / yveltal_stats['health'] * 100, 1)}%")
         # play the attacking animation.
         attacking = True
         if attacking is True:
@@ -289,7 +299,7 @@ while True:
                 for i in range(10):
                     changeSpriteImage(swampert_sprite, i)
                     pause(80, True)
-        # stop attacking
+        # stop attacking.
         attacking = False
         # pause a bit before hiding the move info display labels.
         pause(200)
