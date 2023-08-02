@@ -114,6 +114,7 @@ hydro_pump = makeLabel("HYDRO PUMP", 30, 230, 290, "black", "Agency FB")
 hammer_arm = makeLabel("HAMMER ARM", 30, 40, 343, "black", "Agency FB")
 water_pulse = makeLabel("WATER PULSE", 30, 230, 343, "black", "Agency FB")
 trivia_label = makeLabel("", 30, 50, 50, "white", "Agency FB")
+potions = makeSprite("sprites/potions.png")
 # stats for all pokemon
 eevee_stats = {"type": "NORMAL", "type 2": "NONE", "health": 175, "defense": 1}
 lucario_stats = {"type": "FIGHTING", "type 2": "STEEL", "health": 275, "defense": 0.8}
@@ -135,6 +136,8 @@ showSprite(yveltal_sprite)
 # showSprite(garchomp_sprite)
 # showSprite(lucario_sprite)
 # showSprite(eevee_sprite)
+transformSprite(potions, 0, 2.2)
+moveSprite(potions, 10, 50)
 moveSprite(eevee_sprite, 450, 100, True)
 transformSprite(eevee_sprite, 0, 0.35)
 moveSprite(lucario_sprite, 450, 100, True)
@@ -327,5 +330,6 @@ while True:
             trivia_index = random.randint(0, len(trivia) - 1)
             changeLabel(trivia_label, f"Fun fact:<br>{trivia[trivia_index]}")
             showLabel(trivia_label)
+            showSprite(potions)
             endWait()
 endWait()
