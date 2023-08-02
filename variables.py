@@ -28,27 +28,27 @@ type_effectiveness = {"FIRE": {"FIRE": 0.5, "WATER": 0.5, "GRASS": 2, "NORMAL": 
                       "NONE": {"FIRE": 1, "WATER": 1, "GRASS": 1, "NORMAL": 1, "FIGHTING": 1, "GROUND": 1, "DRAGON": 1,
                                   "STEEL": 1, "DARK": 1, "FLYING": 1, "PSYCHIC": 1, "BUG": 1, "NONE": 1}}
 
-eevee_moves = ({"name": "TACKLE", "damage": 40, "accuracy": 100, "type": "NORMAL", "stab": True},
+eevee_moves = [{"name": "TACKLE", "damage": 40, "accuracy": 100, "type": "NORMAL", "stab": True},
                {"name": "TAKE DOWN", "damage": 90, "accuracy": 85, "type": "NORMAL", "stab": True},
                {"name": "SPLASH", "damage": 0, "accuracy": 100, "type": "NORMAL", "stab": True},
-               {"name": "DOUBLE KICK", "damage": 60, "accuracy": 100, "type": "FIGHTING", "stab": False})
+               {"name": "DOUBLE KICK", "damage": 60, "accuracy": 100, "type": "FIGHTING", "stab": False}]
 
-garchomp_moves = ({"name": "BITE", "damage": 60, "accuracy": 100, "type": "DARK", "stab": False},
+garchomp_moves = [{"name": "BITE", "damage": 60, "accuracy": 100, "type": "DARK", "stab": False},
                   {"name": "TAKE DOWN", "damage": 90, "accuracy": 85, "type": "NORMAL", "stab": False},
                   {"name": "DRAGON TAIL", "damage": 60, "accuracy": 90, "type": "DRAGON", "stab": True},
-                  {"name": "TACKLE", "damage": 40, "accuracy": 100, "type": "NORMAL", "stab": False})
+                  {"name": "TACKLE", "damage": 40, "accuracy": 100, "type": "NORMAL", "stab": False}]
 
-lucario_moves = ({"name": "METAL CLAW", "damage": 50, "accuracy": 95, "type": "STEEL", "stab": True},
+lucario_moves = [{"name": "METAL CLAW", "damage": 50, "accuracy": 95, "type": "STEEL", "stab": True},
                  {"name": "ROCK SMASH", "damage": 40, "accuracy": 100, "type": "FIGHTING", "stab": True},
                  {"name": "FORCE PALM", "damage": 60, "accuracy": 100, "type": "FIGHTING", "stab": True},
-                 {"name": "TRAILBLAZE", "damage": 50, "accuracy": 100, "type": "GRASS", "stab": False})
+                 {"name": "TRAILBLAZE", "damage": 50, "accuracy": 100, "type": "GRASS", "stab": False}]
 
-yveltal_moves = ({"name": "OBLIVION WING", "damage": 80, "accuracy": 100, "type": "FLYING", "stab": True},
+yveltal_moves = [{"name": "OBLIVION WING", "damage": 80, "accuracy": 100, "type": "FLYING", "stab": True},
                  {"name": "DRAGON RUSH", "damage": 100, "accuracy": 75, "type": "DRAGON", "stab": False},
                  {"name": "HURRICANE", "damage": 110, "accuracy": 70, "type": "FLYING", "stab": True},
-                 {"name": "PSYCHIC", "damage": 90, "accuracy": 100, "type": "PSYCHIC", "stab": False})
+                 {"name": "PSYCHIC", "damage": 90, "accuracy": 100, "type": "PSYCHIC", "stab": False}]
 
-trivia = ("""Pikachu wasn't supposed to be the mascot;<br>it was originally going to be poliwhirl or clefairy.""",
+trivia = ["""Pikachu wasn't supposed to be the mascot;<br>it was originally going to be poliwhirl or clefairy.""",
 """Rhydon was the first pokemon ever created.""",
 """in 2008, japanese scientists discovered a new enzyme<br>which they named pikachurin.""",
 """Pikachu is featured on legal tender.<br>There was a print run of the niuean 1$ coin that has<br>pikachu on one side of it.""",
@@ -65,4 +65,4 @@ trivia = ("""Pikachu wasn't supposed to be the mascot;<br>it was originally goin
 """Shiny Kantoan grimer is the same colour as<br>Alolan grimer and Shiny Alolan grimer is the same<br>colour as kantoan grimer.""",
 """Arcanine was originally supposed to be a legendary<br>Pokemon.""",
 """Pokemon is short for Pocket Monsters.""",
-"""Ruby and sapphire are the only games where<br>you have can meet your father.""")
+"""Ruby and sapphire are the only games where<br>you have can meet your father."""]

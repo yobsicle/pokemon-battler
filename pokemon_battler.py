@@ -183,6 +183,7 @@ next_frame = clock()
 frame = 0
 attacking = False
 
+# some variables set to their defaults.
 damage_acc = makeLabel( f"{moves[current_move]['damage']}/{moves[current_move]['accuracy']}", 28, 526, 301, "black", "Agency FB")
 move_type = makeLabel(f"{moves[current_move]['type']}", 28, 485, 343, "black", "Agency FB")
 showLabel(damage_acc)
@@ -191,8 +192,10 @@ enemy_current_hp = yveltal_stats["health"]
 player_current_hp = starter_stats["health"]
 enemy_hp = makeLabel(f"hp: {round(enemy_current_hp / yveltal_stats['health'] * 100, 1)}%", 30, 390, 210, "black", "Agency FB")
 player_hp = makeLabel(f"hp: {round(player_current_hp / starter_stats['health'] * 100, 1)}%", 30, 100, 110, "black", "Agency FB")
+you_won = makeLabel(f"You beat<br>trainer {'evan'}", 30, 50, 50, "white", "Agency FB")
 showLabel(enemy_hp)
 showLabel(player_hp)
+battle_won = False
 # the actual running game
 while True:
     # the clock to set the framerate of the animations.
@@ -283,8 +286,12 @@ while True:
         else:
             # take the move damage away from the enemy's health.
             enemy_current_hp -= damage
+            if enemy_current_hp <= 0:
+                enemy_current_hp = 0
         # update the enemy health label.
         changeLabel(enemy_hp, f"hp: {round(enemy_current_hp / yveltal_stats['health'] * 100, 1)}%")
+        if enemy_current_hp == 0:
+            battle_won = True
         # play the attacking animation.
         attacking = True
         if attacking is True:
@@ -316,20 +323,25 @@ while True:
         showSprite(battle_menu)
         showLabel(damage_acc)
         showLabel(move_type)
-    elif keyPressed("y"):
-        showing_trivia = True
-        while showing_trivia is True:
-            hide_show_starter("hide")
-            hide_show_moves("hide")
-            hideLabel(enemy_hp)
-            hideLabel(player_hp)
-            hideLabel(damage_acc)
-            hideLabel(move_type)
-            hideSprite(battle_menu)
-            showSprite(trivia_display)
-            trivia_index = random.randint(0, len(trivia) - 1)
-            changeLabel(trivia_label, f"Fun fact:<br>{trivia[trivia_index]}")
-            showLabel(trivia_label)
-            showSprite(potions)
-            endWait()
+    if battle_won is True:
+        hide_show_moves("hide")
+        hideSprite(battle_menu)
+        hideLabel(damage_acc)
+        hideLabel(move_type)
+        showLabel(text_display)
+        showLabel(you_won)
+        waitPress()
+        hideLabel(you_won)
+        hideLabel(text_display)
+        hideLabel(enemy_hp)
+        hideLabel(player_hp)
+        showSprite(trivia_display)
+        hide_show_starter("hide")
+        trivia_index = random.randint(0, len(trivia) - 1)
+        changeLabel(trivia_label, f"Fun fact:<br>{trivia[trivia_index]}")
+        del trivia[trivia_index]
+        showLabel(trivia_label)
+        showSprite(potions)
+        battle_won = False
+        pause(5000)
 endWait()
