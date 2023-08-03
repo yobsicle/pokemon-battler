@@ -192,7 +192,7 @@ enemy_current_hp = yveltal_stats["health"]
 player_current_hp = starter_stats["health"]
 enemy_hp = makeLabel(f"hp: {round(enemy_current_hp / yveltal_stats['health'] * 100, 1)}%", 30, 390, 210, "black", "Agency FB")
 player_hp = makeLabel(f"hp: {round(player_current_hp / starter_stats['health'] * 100, 1)}%", 30, 100, 110, "black", "Agency FB")
-you_won = makeLabel(f"You beat<br>trainer {'evan'}", 30, 50, 50, "white", "Agency FB")
+you_won = makeLabel(f"You beat<br>TRAINER {'EVAN'}!", 40, 30, 290, "white", "Agency FB")
 showLabel(enemy_hp)
 showLabel(player_hp)
 battle_won = False
@@ -265,10 +265,10 @@ while True:
         # use the damage calc function.
         damage, effectiveness, punctuation = calc_damage(yveltal_stats, moves[current_move])
         # make the labels to display, the move, it's effectiveness, and if it hit.
-        display_move_used = makeLabel(f"{starter_choice} used {moves[current_move]['name']}!", 40, 40, 290, "white", "Agency FB")
-        display_effectiveness = makeLabel(f"It was {effectiveness} effective{punctuation}", 40, 40, 330, "white", "Agency FB")
-        move_missed = makeLabel("It missed!", 40, 40, 330, "white", "Agency FB")
-        immune = makeLabel("It had no effect.", 40, 40, 330, "white", "Agency FB")
+        display_move_used = makeLabel(f"{starter_choice} used {moves[current_move]['name']}!", 40, 30, 290, "white", "Agency FB")
+        display_effectiveness = makeLabel(f"It was {effectiveness} effective{punctuation}", 40, 30, 330, "white", "Agency FB")
+        move_missed = makeLabel("It missed!", 40, 30, 330, "white", "Agency FB")
+        immune = makeLabel("It had no effect.", 40, 30, 330, "white", "Agency FB")
         # show the used move.
         showLabel(display_move_used)
         # run if the move misses.
@@ -323,13 +323,14 @@ while True:
         showSprite(battle_menu)
         showLabel(damage_acc)
         showLabel(move_type)
-    if battle_won is True:
+    while battle_won is True:
         hide_show_moves("hide")
         hideSprite(battle_menu)
         hideLabel(damage_acc)
         hideLabel(move_type)
         showLabel(text_display)
         showLabel(you_won)
+        pause(500)
         waitPress()
         hideLabel(you_won)
         hideLabel(text_display)
@@ -342,6 +343,19 @@ while True:
         del trivia[trivia_index]
         showLabel(trivia_label)
         showSprite(potions)
+        pause(100)
+        waitPress()
+        pause(500)
+        enemy_current_hp = yveltal_stats["health"]
+        changeLabel(enemy_hp, f"hp: {round(enemy_current_hp / yveltal_stats['health'] * 100, 1)}%")
+        hide_show_starter('show')
+        hide_show_moves('show')
+        showSprite(battle_menu)
+        showLabel(move_type)
+        showLabel(enemy_hp)
+        showLabel(player_hp)
+        hideSprite(potions)
+        hideSprite(trivia_display)
+        hideLabel(trivia_label)
         battle_won = False
-        pause(5000)
 endWait()
