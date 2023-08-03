@@ -399,6 +399,7 @@ while True:
         hide_show_moves('show')
         showSprite(battle_menu)
         showLabel(move_type)
+        showLabel(damage_acc)
         showLabel(enemy_hp)
         showLabel(player_hp)
         hideSprite(potions)
