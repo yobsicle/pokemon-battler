@@ -184,14 +184,14 @@ damage_acc = makeLabel( f"{moves[current_move]['damage']}/{moves[current_move]['
 move_type = makeLabel(f"{moves[current_move]['type']}", 28, 485, 343, "black", "Agency FB")
 showLabel(damage_acc)
 showLabel(move_type)
-current_enemy = 'eevee'
+current_enemy = 'EEVEE'
 enemy_stats = eevee_stats
 enemy_moves = eevee_moves
 showSprite(eevee_sprite)
 enemy_current_hp = enemy_stats["health"]
 player_current_hp = starter_stats["health"]
 enemy_hp = makeLabel(f"hp: {round(enemy_current_hp / enemy_stats['health'] * 100, 1)}%", 30, 390, 210, "black", "Agency FB")
-player_hp = makeLabel(f"hp: {round(player_current_hp / starter_stats['health'] * 100, 1)}%", 30, 100, 110, "black", "Agency FB")
+player_hp = makeLabel(f"hp: {player_current_hp} / {starter_stats['health']}%", 30, 100, 110, "black", "Agency FB")
 current_trainer = "EVAN"
 you_won = makeLabel(f"You beat<br>TRAINER {current_trainer}!", 40, 30, 290, "white", "Agency FB")
 showLabel(enemy_hp)
@@ -315,8 +315,50 @@ while True:
                     pause(80, True)
         # stop attacking.
         attacking = False
-        # pause a bit before hiding the move info display labels.
-        pause(200)
+        # pause before moving on.
+        waitPress()
+        if enemy_current_hp > 0:
+            # hide stuff
+            hideLabel(display_move_used)
+            hideLabel(display_effectiveness)
+            hideLabel(move_missed)
+            hideLabel(immune)
+            # make the enemy fight back.
+            enemy_move_choice = random.randint(0,3)
+            damage, effectiveness, punctuation = calc_damage(starter_stats, enemy_moves[enemy_move_choice])
+            # make the labels to display the move, it's effectiveness, and if it hit.
+            display_move_used = makeLabel(f"{current_enemy} used {enemy_moves[current_move]['name']}!", 40, 30, 290, "white", "Agency FB")
+            display_effectiveness = makeLabel(f"It was {effectiveness} effective{punctuation}", 40, 30, 330, "white", "Agency FB")
+            move_missed = makeLabel("It missed!", 40, 30, 330, "white", "Agency FB")
+            immune = makeLabel("It had no effect.", 40, 30, 330, "white", "Agency FB")
+            # show the used move.
+            showLabel(display_move_used)
+            # run if the move misses.
+            if damage == "missed":
+                # show the move missed label.
+                showLabel(move_missed)
+            # run if the pokemon is immune
+            elif damage == "immune":
+                showLabel(immune)
+            # run if the effectiveness is super or not very.
+            elif effectiveness == "super" or effectiveness == "not very":
+                # show the move effectiveness label.
+                showLabel(display_effectiveness)
+                # take the move damage away from the player's health.
+                player_current_hp -= damage
+                if player_current_hp <= 0:
+                    player_current_hp = 0
+            else:
+                # take the move damage away from the player's health.
+                player_current_hp -= damage
+                if player_current_hp <= 0:
+                    player_current_hp= 0
+            # update the player health label.
+            changeLabel(player_hp, f"hp: {player_current_hp} / {starter_stats['health']}%")
+            if player_current_hp == 0:
+                battle_lost = True
+        # rehide the labels.
+        waitPress()
         hideLabel(move_missed)
         hideLabel(immune)
         hideLabel(display_move_used)
@@ -359,8 +401,8 @@ while True:
         pause(500)
         # update the current enemy info.
         # switch to lucario if eevee is beaten.
-        if current_enemy == 'eevee':
-            current_enemy = 'lucario'
+        if current_enemy == 'EEVEE':
+            current_enemy = 'LUCARIO'
             enemy_stats = lucario_stats
             hideSprite(eevee_sprite)
             showSprite(lucario_sprite)
@@ -368,8 +410,8 @@ while True:
             current_trainer = "MILLIE"
             changeLabel(you_won, f"You beat<br>TRAINER {current_trainer}!")
         # switch to garchomp if lucario is beaten.
-        elif current_enemy == 'lucario':
-            current_enemy = 'garchomp'
+        elif current_enemy == 'LUCARIO':
+            current_enemy = 'GARCHOMP'
             enemy_stats = garchomp_stats
             hideSprite(lucario_sprite)
             showSprite(garchomp_sprite)
@@ -377,8 +419,8 @@ while True:
             current_trainer = "MATTHEW"
             changeLabel(you_won, f"You beat<br>TRAINER {current_trainer}!")
         # switch to yveltal if garchomp is beaten.
-        elif current_enemy == 'garchomp':
-            current_enemy = 'yveltal'
+        elif current_enemy == 'GARCHOMP':
+            current_enemy = 'YVELTAL'
             enemy_stats = yveltal_stats
             hideSprite(garchomp_sprite)
             showSprite(yveltal_sprite)
@@ -386,7 +428,7 @@ while True:
             current_trainer = "TOBY"
             changeLabel(you_won, f"You beat<br>TRAINER {current_trainer}!")
         # win the game if yveltal is beaten.
-        elif current_enemy == 'yveltal':
+        elif current_enemy == 'YVELTAL':
             current_enemy = 'game won'
             enemy_stats = garchomp_stats
             hideSprite(yveltal_sprite)
