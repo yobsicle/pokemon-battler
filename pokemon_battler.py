@@ -86,7 +86,6 @@ def calc_damage(target_stats, move):
     else:
         effectiveness = ""
         punctuation = ""
-    print(damage)
     return damage, effectiveness, punctuation
 
 
@@ -192,6 +191,7 @@ enemy_current_hp = enemy_stats["health"]
 player_current_hp = starter_stats["health"]
 enemy_hp = makeLabel(f"hp: {round(enemy_current_hp / enemy_stats['health'] * 100, 1)}%", 30, 390, 210, "black", "Agency FB")
 player_hp = makeLabel(f"hp: {round(player_current_hp, 2)} / {starter_stats['health']}", 30, 100, 110, "black", "Agency FB")
+display_money_dropped = makeLabel("", 40, 30, 290, "white", "Agency FB")
 current_trainer = "EVAN"
 you_won = makeLabel(f"You beat<br>TRAINER {current_trainer}!", 40, 30, 290, "white", "Agency FB")
 showLabel(enemy_hp)
@@ -289,10 +289,7 @@ while True:
             # show the move effectiveness label.
             showLabel(display_effectiveness)
             # take the move damage away from the enemy's health.
-            print(enemy_current_hp)
-            print(garchomp_stats["health"])
             enemy_current_hp -= damage
-            print(enemy_current_hp)
             if enemy_current_hp <= 0:
                 enemy_current_hp = 0
         else:
@@ -333,7 +330,6 @@ while True:
             hideLabel(immune)
             # make the enemy fight back.
             enemy_move_choice = random.randint(0,3)
-            print(enemy_move_choice)
             damage, effectiveness, punctuation = calc_damage(starter_stats, enemy_moves[enemy_move_choice])
             # make the labels to display the move, it's effectiveness, and if it hit.
             display_move_used = makeLabel(f"{current_enemy} used {enemy_moves[enemy_move_choice]['name']}!", 40, 30, 290, "white", "Agency FB")
@@ -393,108 +389,126 @@ while True:
         # update the current enemy info.
         # switch to lucario if eevee is beaten.
         if current_enemy == 'EEVEE':
-            current_trainer = "MILLIE"
-            money += random.randint(3, 5)
+            current_trainer = "EVAN"
+            reward = random.randint(3, 5)
+            money += reward
             hideSprite(eevee_sprite)
             changeLabel(money_display, f"${money}")
+            changeLabel(display_money_dropped, f"TRAINER {current_trainer} dropped<br>${reward}.")
             changeLabel(you_won, f"You beat<br>TRAINER {current_trainer}!")
         # switch to garchomp if lucario is beaten.
         elif current_enemy == 'LUCARIO':
-            current_trainer = "MATTHEW"
-            money += random.randint(6, 10)
+            current_trainer = "MILLIE"
+            reward = random.randint(6, 10)
+            money += reward
             hideSprite(lucario_sprite)
             changeLabel(money_display, f"${money}")
+            changeLabel(display_money_dropped, f"TRAINER {current_trainer} dropped<br>${reward}.")
             changeLabel(you_won, f"You beat<br>TRAINER {current_trainer}!")
         # switch to yveltal if garchomp is beaten.
         elif current_enemy == 'GARCHOMP':
-            current_trainer = "TOBY"
-            money += random.randint(11, 18)
+            current_trainer = "MATTHEW"
+            reward = random.randint(11, 18)
+            money += reward
             hideSprite(garchomp_sprite)
             changeLabel(money_display, f"${money}")
+            changeLabel(display_money_dropped, f"TRAINER {current_trainer} dropped<br>${reward}.")
             changeLabel(you_won, f"You beat<br>TRAINER {current_trainer}!")
         # win the game if yveltal is beaten.
         elif current_enemy == 'YVELTAL':
+            current_trainer = "TOBY"
             money += 1000000
+            reward = 1000000
             changeLabel(money_display, f"${money}")
+            changeLabel(display_money_dropped, f"TRAINER {current_trainer} dropped<br>${reward}.")
+            changeLabel(you_won, f"You beat<br>TRAINER {current_trainer}!")
             hideSprite(yveltal_sprite)
+            game_won = True
         # hide the stuff in the way of the menus.
         hide_show_moves("hide")
         hideSprite(battle_menu)
         hideLabel(damage_acc)
         hideLabel(move_type)
-        # show the you won text.
+        # show the money reward text.
         showLabel(text_display)
         showLabel(you_won)
         # wait untill the player presses a button.
         pause(500)
         waitPress()
-        # hide some more labels in the way.
         hideLabel(you_won)
-        hideLabel(text_display)
-        hideLabel(enemy_hp)
-        hideLabel(player_hp)
-        showSprite(trivia_display)
-        hide_show_starter("hide")
-        # randomly select a piece of trivia.
-        trivia_index = random.randint(0, len(trivia) - 1)
-        changeLabel(trivia_label, f"Fun fact:<br>{trivia[trivia_index]}")
-        # delete the used trivia so it doesn't appear again.
-        del trivia[trivia_index]
-        # show the trivia.
-        showLabel(trivia_label)
-        pause(200)
+        # show the you won text.
+        showLabel(display_money_dropped)
+        # wait untill the player presses a button.
+        pause(500)
         waitPress()
-        pause(100)
-        hideLabel(trivia_label)
-        showSprite(potions)
-        potion = makeLabel("Potion:<br>20 HP<br>$3", 30, 25, 100, "white", "Agency FB")
-        super_potion = makeLabel("Super potion:<br>50 HP<br>$7", 30, 165, 100, "white", "Agency FB")
-        hyper_potion = makeLabel("Hyper potion:<br>120 HP<br>$12", 30, 330, 100, "white", "Agency FB")
-        max_potion = makeLabel("Max potion:<br>Max HP<br>$25", 30, 480, 100, "white", "Agency FB")
-        showLabel(potion)
-        showLabel(super_potion)
-        showLabel(hyper_potion)
-        showLabel(max_potion)
-        choosing_potion = True
-        while choosing_potion is True:
-            try:
-                potion_choice = int(input("""Choose a potion.
-1: Potion
-2: Super potion
-3: Hyper potion
-4: Max potion
-5: No potion
-Enter choice here: """))
-                if potion_choice == 1 and money >= 3:
-                    player_current_hp += 20
-                    if player_current_hp > starter_stats['health']:
+        if game_won is False:
+            # hide some more labels in the way.
+            hideLabel(display_money_dropped)
+            hideLabel(text_display)
+            hideLabel(enemy_hp)
+            hideLabel(player_hp)
+            showSprite(trivia_display)
+            hide_show_starter("hide")
+            # randomly select a piece of trivia.
+            trivia_index = random.randint(0, len(trivia) - 1)
+            changeLabel(trivia_label, f"Fun fact:<br>{trivia[trivia_index]}")
+            # delete the used trivia so it doesn't appear again.
+            del trivia[trivia_index]
+            # show the trivia.
+            showLabel(trivia_label)
+            pause(200)
+            waitPress()
+            pause(100)
+            hideLabel(trivia_label)
+            showSprite(potions)
+            potion = makeLabel("Potion:<br>20 HP<br>$3", 30, 25, 100, "white", "Agency FB")
+            super_potion = makeLabel("Super potion:<br>50 HP<br>$7", 30, 165, 100, "white", "Agency FB")
+            hyper_potion = makeLabel("Hyper potion:<br>120 HP<br>$12", 30, 330, 100, "white", "Agency FB")
+            max_potion = makeLabel("Max potion:<br>Max HP<br>$25", 30, 480, 100, "white", "Agency FB")
+            showLabel(potion)
+            showLabel(super_potion)
+            showLabel(hyper_potion)
+            showLabel(max_potion)
+            choosing_potion = True
+            while choosing_potion is True:
+                try:
+                    potion_choice = int(input("""Choose a potion.
+    1: Potion
+    2: Super potion
+    3: Hyper potion
+    4: Max potion
+    5: No potion
+    Enter choice here: """))
+                    if potion_choice == 1 and money >= 3:
+                        player_current_hp += 20
+                        if player_current_hp > starter_stats['health']:
+                            player_current_hp = starter_stats['health']
+                        money -= 3
+                        choosing_potion = False
+                    elif potion_choice == 2 and money >= 7:
+                        player_current_hp += 50
+                        if player_current_hp > starter_stats['health']:
+                            player_current_hp = starter_stats['health']
+                        money -= 7
+                        choosing_potion = False
+                    elif potion_choice == 3 and money >= 12:
+                        player_current_hp += 120
+                        if player_current_hp > starter_stats['health']:
+                            player_current_hp = starter_stats['health']
+                        money -= 12
+                        choosing_potion = False
+                    elif potion_choice == 4 and money >= 25:
                         player_current_hp = starter_stats['health']
-                    money -= 3
-                    choosing_potion = False
-                elif potion_choice == 2 and money >= 7:
-                    player_current_hp += 50
-                    if player_current_hp > starter_stats['health']:
-                        player_current_hp = starter_stats['health']
-                    money -= 7
-                    choosing_potion = False
-                elif potion_choice == 3 and money >= 12:
-                    player_current_hp += 120
-                    if player_current_hp > starter_stats['health']:
-                        player_current_hp = starter_stats['health']
-                    money -= 12
-                    choosing_potion = False
-                elif potion_choice == 4 and money >= 25:
-                    player_current_hp = starter_stats['health']
-                    money -= 25
-                    choosing_potion = False
-                elif potion_choice == 5:
-                    choosing_potion = False
-                else:
-                    print("Not enough money!")
-                changeLabel(money_display, f"${money}")
-                changeLabel(player_hp, f"hp: {round(player_current_hp, 1)} / {starter_stats['health']}")
-            except ValueError:
-                print("Please enter an integer.")
+                        money -= 25
+                        choosing_potion = False
+                    elif potion_choice == 5:
+                        choosing_potion = False
+                    else:
+                        print("Not enough money!")
+                    changeLabel(money_display, f"${money}")
+                    changeLabel(player_hp, f"hp: {round(player_current_hp, 1)} / {starter_stats['health']}")
+                except ValueError:
+                    print("Please enter an integer.")
         pause(500)
         hideLabel(potion)
         hideLabel(super_potion)
