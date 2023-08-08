@@ -121,11 +121,11 @@ lucario_stats = {"type": "FIGHTING", "type 2": "STEEL", "health": 275, "defense"
 garchomp_stats = {"type": "DRAGON", "type 2": "NONE", "health": 200, "defense": 0.8}
 yveltal_stats = {"type": "DARK", "type 2": "FLYING", "health": 175, "defense": 0.6}
 if starter_choice == "BLAZIKEN":
-    starter_stats = {"type": "FIRE", "type 2": "FIGHTING", "health": 250, "defense": 0.45}
+    starter_stats = {"type": "FIRE", "type 2": "FIGHTING", "health": 150, "defense": 0.45}
 elif starter_choice == "SWAMPERT":
-    starter_stats = {"type": "WATER", "type 2": "GROUND", "health": 250, "defense": 0.45}
+    starter_stats = {"type": "WATER", "type 2": "GROUND", "health": 150, "defense": 0.45}
 elif starter_choice == "SCEPTILE":
-    starter_stats = {"type": "GRASS", "type 2": "NONE", "health": 250, "defense": 0.45}
+    starter_stats = {"type": "GRASS", "type 2": "NONE", "health": 150, "defense": 0.45}
 
 # move, show, transform all the sprites and labels so they look right
 # and appear in the correct position.
@@ -133,7 +133,7 @@ transformSprite(background_sprite, 0, 2.5)
 moveSprite(background_sprite, 0, 0)
 showSprite(background_sprite)
 transformSprite(potions, 0, 2.2)
-moveSprite(potions, 10, 50)
+moveSprite(potions, 15, 200)
 moveSprite(eevee_sprite, 450, 100, True)
 transformSprite(eevee_sprite, 0, 0.35)
 moveSprite(lucario_sprite, 450, 100, True)
@@ -191,12 +191,17 @@ showSprite(eevee_sprite)
 enemy_current_hp = enemy_stats["health"]
 player_current_hp = starter_stats["health"]
 enemy_hp = makeLabel(f"hp: {round(enemy_current_hp / enemy_stats['health'] * 100, 1)}%", 30, 390, 210, "black", "Agency FB")
-player_hp = makeLabel(f"hp: {player_current_hp} / {starter_stats['health']}%", 30, 100, 110, "black", "Agency FB")
+player_hp = makeLabel(f"hp: {round(player_current_hp, 2)} / {starter_stats['health']}", 30, 100, 110, "black", "Agency FB")
 current_trainer = "EVAN"
 you_won = makeLabel(f"You beat<br>TRAINER {current_trainer}!", 40, 30, 290, "white", "Agency FB")
 showLabel(enemy_hp)
 showLabel(player_hp)
+game_won = False
+game_lost = False
 battle_won = False
+money = 0
+money_display = makeLabel(f"${money}", 30, 10, 10, "black", "Agency FB")
+showLabel(money_display)
 # the actual running game
 while True:
     # the clock to set the framerate of the animations.
@@ -284,12 +289,18 @@ while True:
             # show the move effectiveness label.
             showLabel(display_effectiveness)
             # take the move damage away from the enemy's health.
+            print(enemy_current_hp)
+            print(garchomp_stats["health"])
             enemy_current_hp -= damage
+            print(enemy_current_hp)
             if enemy_current_hp <= 0:
                 enemy_current_hp = 0
         else:
             # take the move damage away from the enemy's health.
+            print(enemy_current_hp)
+            print(garchomp_stats["health"])
             enemy_current_hp -= damage
+            print(enemy_current_hp)
             if enemy_current_hp <= 0:
                 enemy_current_hp = 0
         # update the enemy health label.
@@ -325,9 +336,10 @@ while True:
             hideLabel(immune)
             # make the enemy fight back.
             enemy_move_choice = random.randint(0,3)
+            print(enemy_move_choice)
             damage, effectiveness, punctuation = calc_damage(starter_stats, enemy_moves[enemy_move_choice])
             # make the labels to display the move, it's effectiveness, and if it hit.
-            display_move_used = makeLabel(f"{current_enemy} used {enemy_moves[current_move]['name']}!", 40, 30, 290, "white", "Agency FB")
+            display_move_used = makeLabel(f"{current_enemy} used {enemy_moves[enemy_move_choice]['name']}!", 40, 30, 290, "white", "Agency FB")
             display_effectiveness = makeLabel(f"It was {effectiveness} effective{punctuation}", 40, 30, 330, "white", "Agency FB")
             move_missed = makeLabel("It missed!", 40, 30, 330, "white", "Agency FB")
             immune = makeLabel("It had no effect.", 40, 30, 330, "white", "Agency FB")
@@ -354,11 +366,12 @@ while True:
                 if player_current_hp <= 0:
                     player_current_hp= 0
             # update the player health label.
-            changeLabel(player_hp, f"hp: {player_current_hp} / {starter_stats['health']}%")
+            changeLabel(player_hp, f"hp: {round(player_current_hp, 1)} / {starter_stats['health']}")
             if player_current_hp == 0:
-                battle_lost = True
+                game_lost = True
         # rehide the labels.
         waitPress()
+        pause(500)
         hideLabel(move_missed)
         hideLabel(immune)
         hideLabel(display_move_used)
@@ -369,7 +382,44 @@ while True:
         showSprite(battle_menu)
         showLabel(damage_acc)
         showLabel(move_type)
+    while game_lost is True:
+        showLabel(trivia_display)
+        you_lost = makeLabel("Sorry, you lost.<br>Better luck next time!<br>(Press esc to quit)", 40, 50, 50, "white", "Agency FB")
+        showLabel(you_lost)
+        endWait()
+    while game_won is True:
+        showLabel(trivia_display)
+        win = makeLabel("Congrats, you won!<br>Thanks for playing my game!<br>(Press esc to quit)", 40, 50, 50, "white", "Agency FB")
+        showLabel(win)
+        endWait()
     while battle_won is True:
+        # update the current enemy info.
+        # switch to lucario if eevee is beaten.
+        if current_enemy == 'EEVEE':
+            current_trainer = "MILLIE"
+            money += random.randint(3, 5)
+            hideSprite(eevee_sprite)
+            changeLabel(money_display, f"${money}")
+            changeLabel(you_won, f"You beat<br>TRAINER {current_trainer}!")
+        # switch to garchomp if lucario is beaten.
+        elif current_enemy == 'LUCARIO':
+            current_trainer = "MATTHEW"
+            money += random.randint(6, 10)
+            hideSprite(lucario_sprite)
+            changeLabel(money_display, f"${money}")
+            changeLabel(you_won, f"You beat<br>TRAINER {current_trainer}!")
+        # switch to yveltal if garchomp is beaten.
+        elif current_enemy == 'GARCHOMP':
+            current_trainer = "TOBY"
+            money += random.randint(11, 18)
+            hideSprite(garchomp_sprite)
+            changeLabel(money_display, f"${money}")
+            changeLabel(you_won, f"You beat<br>TRAINER {current_trainer}!")
+        # win the game if yveltal is beaten.
+        elif current_enemy == 'YVELTAL':
+            money += 1000000
+            changeLabel(money_display, f"${money}")
+            hideSprite(yveltal_sprite)
         # hide the stuff in the way of the menus.
         hide_show_moves("hide")
         hideSprite(battle_menu)
@@ -395,43 +445,59 @@ while True:
         del trivia[trivia_index]
         # show the trivia.
         showLabel(trivia_label)
-        showSprite(potions)
-        pause(100)
+        pause(200)
         waitPress()
+        pause(100)
+        hideLabel(trivia_label)
+        showSprite(potions)
+        potion = makeLabel("Potion:<br>20 HP<br>$3", 30, 25, 100, "white", "Agency FB")
+        super_potion = makeLabel("Super potion:<br>50 HP<br>$7", 30, 165, 100, "white", "Agency FB")
+        hyper_potion = makeLabel("Hyper potion:<br>120 HP<br>$12", 30, 330, 100, "white", "Agency FB")
+        max_potion = makeLabel("Max potion:<br>Max HP<br>$25", 30, 480, 100, "white", "Agency FB")
+        showLabel(potion)
+        showLabel(super_potion)
+        showLabel(hyper_potion)
+        showLabel(max_potion)
+        choosing_potion = True
+        while choosing_potion is True:
+            try:
+                potion_choice = int(input("""Choose a potion.
+1: Potion
+2: Super potion
+3: Hyper potion
+4: Max potion
+5: No potion
+Enter choice here: """))
+                if potion_choice == 1 and money >= 3:
+                    player_current_hp += 20
+                    money -= 3
+                    choosing_potion = False
+                elif potion_choice == 2 and money >= 7:
+                    player_current_hp += 50
+                    money -= 7
+                    choosing_potion = False
+                elif potion_choice == 3 and money >= 12:
+                    player_current_hp += 120
+                    money -= 12
+                    choosing_potion = False
+                elif potion_choice == 4 and money >= 25:
+                    player_current_hp = starter_stats('health')
+                    money -= 25
+                    choosing_potion = False
+                elif potion_choice == 5:
+                    choosing_potion = False
+                else:
+                    print("Not enough money!")
+                changeLabel(money_display, f"${money}")
+                changeLabel(player_hp, f"hp: {round(player_current_hp, 1)} / {starter_stats['health']}")
+            except ValueError:
+                print("Please enter an integer.")
         pause(500)
-        # update the current enemy info.
-        # switch to lucario if eevee is beaten.
-        if current_enemy == 'EEVEE':
-            current_enemy = 'LUCARIO'
-            enemy_stats = lucario_stats
-            hideSprite(eevee_sprite)
-            showSprite(lucario_sprite)
-            enemy_moves = lucario_moves
-            current_trainer = "MILLIE"
-            changeLabel(you_won, f"You beat<br>TRAINER {current_trainer}!")
-        # switch to garchomp if lucario is beaten.
-        elif current_enemy == 'LUCARIO':
-            current_enemy = 'GARCHOMP'
-            enemy_stats = garchomp_stats
-            hideSprite(lucario_sprite)
-            showSprite(garchomp_sprite)
-            enemy_moves = garchomp_moves
-            current_trainer = "MATTHEW"
-            changeLabel(you_won, f"You beat<br>TRAINER {current_trainer}!")
-        # switch to yveltal if garchomp is beaten.
-        elif current_enemy == 'GARCHOMP':
-            current_enemy = 'YVELTAL'
-            enemy_stats = yveltal_stats
-            hideSprite(garchomp_sprite)
-            showSprite(yveltal_sprite)
-            enemy_moves = yveltal_moves
-            current_trainer = "TOBY"
-            changeLabel(you_won, f"You beat<br>TRAINER {current_trainer}!")
-        # win the game if yveltal is beaten.
-        elif current_enemy == 'YVELTAL':
-            current_enemy = 'game won'
-            enemy_stats = garchomp_stats
-            hideSprite(yveltal_sprite)
+        hideLabel(potion)
+        hideLabel(super_potion)
+        hideLabel(hyper_potion)
+        hideLabel(max_potion)
+        hideSprite(potions)
         # reset the enemy's hp.
         enemy_current_hp = enemy_stats["health"]
         changeLabel(enemy_hp, f"hp: {round(enemy_current_hp / enemy_stats['health'] * 100, 1)}%")
@@ -444,9 +510,25 @@ while True:
         showLabel(damage_acc)
         showLabel(enemy_hp)
         showLabel(player_hp)
-        hideSprite(potions)
         hideSprite(trivia_display)
-        hideLabel(trivia_label)
+        if current_enemy == "EEVEE":
+            current_enemy = 'LUCARIO'
+            enemy_stats = lucario_stats
+            showSprite(lucario_sprite)
+            enemy_moves = lucario_moves
+        elif current_enemy == 'LUCARIO':
+            current_enemy = 'GARCHOMP'
+            enemy_stats = garchomp_stats
+            showSprite(garchomp_sprite)
+            enemy_moves = garchomp_moves
+        elif current_enemy == 'GARCHOMP':
+            current_enemy = 'YVELTAL'
+            enemy_stats = yveltal_stats
+            showSprite(yveltal_sprite)
+            enemy_moves = yveltal_moves
+        elif current_enemy == 'YVELTAL':
+            game_won = True
+            enemy_stats = garchomp_stats
         # stop the loop
         battle_won = False
 endWait()
