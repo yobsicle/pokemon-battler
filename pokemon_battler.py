@@ -297,10 +297,7 @@ while True:
                 enemy_current_hp = 0
         else:
             # take the move damage away from the enemy's health.
-            print(enemy_current_hp)
-            print(garchomp_stats["health"])
             enemy_current_hp -= damage
-            print(enemy_current_hp)
             if enemy_current_hp <= 0:
                 enemy_current_hp = 0
         # update the enemy health label.
@@ -470,18 +467,24 @@ while True:
 Enter choice here: """))
                 if potion_choice == 1 and money >= 3:
                     player_current_hp += 20
+                    if player_current_hp > starter_stats['health']:
+                        player_current_hp = starter_stats['health']
                     money -= 3
                     choosing_potion = False
                 elif potion_choice == 2 and money >= 7:
                     player_current_hp += 50
+                    if player_current_hp > starter_stats['health']:
+                        player_current_hp = starter_stats['health']
                     money -= 7
                     choosing_potion = False
                 elif potion_choice == 3 and money >= 12:
                     player_current_hp += 120
+                    if player_current_hp > starter_stats['health']:
+                        player_current_hp = starter_stats['health']
                     money -= 12
                     choosing_potion = False
                 elif potion_choice == 4 and money >= 25:
-                    player_current_hp = starter_stats('health')
+                    player_current_hp = starter_stats['health']
                     money -= 25
                     choosing_potion = False
                 elif potion_choice == 5:
@@ -498,9 +501,6 @@ Enter choice here: """))
         hideLabel(hyper_potion)
         hideLabel(max_potion)
         hideSprite(potions)
-        # reset the enemy's hp.
-        enemy_current_hp = enemy_stats["health"]
-        changeLabel(enemy_hp, f"hp: {round(enemy_current_hp / enemy_stats['health'] * 100, 1)}%")
         # hide the trivia labels and sprites.
         # and show the ones for battling.
         hide_show_starter('show')
@@ -529,6 +529,9 @@ Enter choice here: """))
         elif current_enemy == 'YVELTAL':
             game_won = True
             enemy_stats = garchomp_stats
+        # reset the enemy's hp.
+        enemy_current_hp = enemy_stats["health"]
+        changeLabel(enemy_hp, f"hp: {round(enemy_current_hp / enemy_stats['health'] * 100, 1)}%")
         # stop the loop
         battle_won = False
 endWait()
